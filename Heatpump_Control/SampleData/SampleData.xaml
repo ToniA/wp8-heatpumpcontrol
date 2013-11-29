@@ -1,0 +1,45 @@
+﻿<vm:MainViewModel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:vm="clr-namespace:Heatpump_Control">
+
+    <vm:MainViewModel.heatpumps>
+        <vm:Heatpump titleText="Alakerta" controllerIdentity="02:26:89:28:25:C5" powerState="True" expanded="True" notExpanded="False" heatpumpDisplayName="Panasonic CKP">
+            <vm:Heatpump.operatingModes>
+                <vm:NumbersDataSource Minimum="1" Maximum="5" Default="1"/>
+            </vm:Heatpump.operatingModes>
+            <vm:Heatpump.temperatures>
+                <vm:NumbersDataSource Minimum="16" Maximum="30" Default="22"/>
+            </vm:Heatpump.temperatures>
+            <vm:Heatpump.fanSpeeds>
+                <vm:NumbersDataSource Minimum="1" Maximum="6" Default="1"/>
+            </vm:Heatpump.fanSpeeds>
+            <vm:Heatpump.selectedTypeIndex>
+                <sys:Int32>0</sys:Int32>
+            </vm:Heatpump.selectedTypeIndex>
+            <vm:Heatpump.heatpumpTypeNames>
+                <sys:String>Panasonic CKP</sys:String>
+                <sys:String>Panasonic DKE</sys:String>
+                <sys:String>Ultimate Pro Plus 13 FP</sys:String>
+            </vm:Heatpump.heatpumpTypeNames>
+        </vm:Heatpump>
+
+        <vm:Heatpump titleText="Yläkerta" selectedTypeIndex="2" controllerIdentity="03:26:89:28:25:C5" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Panasonic DKE">
+        </vm:Heatpump>
+    </vm:MainViewModel.heatpumps>
+    
+    <vm:MainViewModel.settings>
+        <vm:Settings
+            SSIDSetting = "Home SSID"
+            UDPBroadcastSetting = "echo '{0}' | LD_LIBRARY_PATH=\\$LD_LIBRARY_PATH:/jffs/usr/lib socat -v - UDP4:192.168.0.255:49722,broadcast"
+            SSHServerSetting = "myhome.dy.fi"
+            SSHPortSetting = "22"
+            SSHAccountSetting = "root"
+            SSHUsePasswordSetting = "false"
+            SSHUseKeySetting = "true"
+            SSHPasswordSetting = "password"
+            SSHKeySetting = "-----BEGIN RSA PRIVATE KEY-----"/>
+    </vm:MainViewModel.settings>
+</vm:MainViewModel>
+
