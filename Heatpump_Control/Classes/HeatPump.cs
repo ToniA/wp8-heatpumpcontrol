@@ -35,6 +35,20 @@ namespace Heatpump_Control
             this.name = name;
             this.displayName = displayName;
         }
+
+        // Without this the ListPicker doesn't show up properly in the designer, but throws
+        // "SelectedIndex must always be set to a valid value"
+        public override bool Equals(object obj)
+        {
+            var target = obj as HeatpumpType;
+            if (target == null)
+                return false;
+
+            if (this.name.Equals(target.name))
+                return true;
+
+            return false;
+        }
     }
 
     [DataContract]

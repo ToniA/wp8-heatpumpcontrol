@@ -15,17 +15,35 @@
             <vm:Heatpump.fanSpeeds>
                 <vm:NumbersDataSource Minimum="1" Maximum="6" Default="1"/>
             </vm:Heatpump.fanSpeeds>
-            <vm:Heatpump.selectedTypeIndex>
-                <sys:Int32>0</sys:Int32>
-            </vm:Heatpump.selectedTypeIndex>
             <vm:Heatpump.heatpumpTypeNames>
                 <sys:String>Panasonic CKP</sys:String>
                 <sys:String>Panasonic DKE</sys:String>
                 <sys:String>Ultimate Pro Plus 13 FP</sys:String>
             </vm:Heatpump.heatpumpTypeNames>
+            <vm:Heatpump.selectedTypeIndex>
+                <sys:Int32>0</sys:Int32>
+            </vm:Heatpump.selectedTypeIndex>
         </vm:Heatpump>
 
-        <vm:Heatpump titleText="Yläkerta" selectedTypeIndex="2" controllerIdentity="03:26:89:28:25:C5" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Panasonic DKE">
+        <vm:Heatpump titleText="Yläkerta" controllerIdentity="02:26:89:28:25:C6" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Panasonic DKE">
+            <vm:Heatpump.heatpumpTypeNames>
+                <sys:String>Panasonic CKP</sys:String>
+                <sys:String>Panasonic DKE</sys:String>
+                <sys:String>Ultimate Pro Plus 13 FP</sys:String>
+            </vm:Heatpump.heatpumpTypeNames>
+            <vm:Heatpump.selectedTypeIndex>
+                <sys:Int32>1</sys:Int32>
+            </vm:Heatpump.selectedTypeIndex>
+        </vm:Heatpump>
+        <vm:Heatpump titleText="Autotalli" controllerIdentity="02:26:89:28:25:C7" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Ultimate Pro Plus 13 FP">
+            <vm:Heatpump.heatpumpTypeNames>
+                <sys:String>Panasonic CKP</sys:String>
+                <sys:String>Panasonic DKE</sys:String>
+                <sys:String>Ultimate Pro Plus 13 FP</sys:String>
+            </vm:Heatpump.heatpumpTypeNames>
+            <vm:Heatpump.selectedTypeIndex>
+                <sys:Int32>2</sys:Int32>
+            </vm:Heatpump.selectedTypeIndex>
         </vm:Heatpump>
     </vm:MainViewModel.heatpumps>
     
