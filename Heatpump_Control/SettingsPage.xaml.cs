@@ -8,6 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using System.IO.IsolatedStorage;
+using Heatpump_Control.Resources;
 
 namespace Heatpump_Control
 {
@@ -19,13 +20,23 @@ namespace Heatpump_Control
             DataContext = App.ViewModel;
         }
 
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            // Localize the appbar, this cannot be done with XAML bindings
+            var appBarButtons = this.ApplicationBar.Buttons as IList<IApplicationBarIconButton>;
+            appBarButtons[0].Text = AppResources.Save;
+
+            var appBarMenuItems = this.ApplicationBar.MenuItems as IList<IApplicationBarMenuItem>;
+            appBarMenuItems[0].Text = AppResources.WipeSettings;
+        }
+
         // How to save the settings into Isolated storage
         private void SaveSettings_Click(object sender, EventArgs e)
         {
             App.ViewModel.settings.Save();
 
             Dispatcher.BeginInvoke(() =>
-              MessageBox.Show("Asetukset talletettu")
+              MessageBox.Show(AppResources.SettingsSaved)
             );
 
             NavigationService.GoBack();
@@ -37,7 +48,7 @@ namespace Heatpump_Control
             IsolatedStorageSettings.ApplicationSettings.Clear();
 
             Dispatcher.BeginInvoke(() =>
-              MessageBox.Show("Oletusasetukset palautettu")
+              MessageBox.Show(AppResources.SettingsWiped)
             );
         }
     }

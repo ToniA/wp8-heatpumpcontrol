@@ -122,115 +122,115 @@
     <comment>Controls the FlowDirection for all elements in the RootFrame. Set to the traditional direction of this resource file's language</comment>
   </data>
   <data name="ResourceLanguage" xml:space="preserve">
-    <value>en-US</value>
+    <value>fi-FI</value>
     <comment>Controls the Language and ensures that the font for all elements in the RootFrame aligns with the app's language. Set to the language code of this resource file's language.</comment>
   </data>
   <data name="ApplicationTitle" xml:space="preserve">
-    <value>HEATPUMPREMOTE</value>
+    <value>ILP ETÄOHJAUS</value>
   </data>
   <data name="CommandNoResponse" xml:space="preserve">
-    <value>No response</value>
+    <value>Vastausta ei saatu</value>
   </data>
   <data name="CommandSent" xml:space="preserve">
-    <value>Command sent</value>
+    <value>Komento lähetetty</value>
   </data>
   <data name="ConnectedToSSID" xml:space="preserve">
-    <value>You are connected to WiFi with SSID</value>
+    <value>Olet kytkeytynyt lähiverkkoon jonka SSID on</value>
   </data>
   <data name="ConnectionSettings" xml:space="preserve">
-    <value>connection settings</value>
+    <value>yhteysasetukset</value>
   </data>
   <data name="ControllersNotFound" xml:space="preserve">
-    <value>No controllers found</value>
+    <value>Ohjaimia ei löydetty</value>
   </data>
   <data name="FanSpeed" xml:space="preserve">
-    <value>FAN SPEED</value>
+    <value>PUHALLUS</value>
   </data>
   <data name="HeatpumpControllerID" xml:space="preserve">
-    <value>Controller ID</value>
+    <value>Kontrollerin ID</value>
   </data>
   <data name="HeatpumpControllers" xml:space="preserve">
-    <value>controllers</value>
+    <value>kontrollerit</value>
   </data>
   <data name="HeatpumpModel" xml:space="preserve">
-    <value>Heatpump model</value>
+    <value>ILP:n malli</value>
   </data>
   <data name="HeatpumpName" xml:space="preserve">
-    <value>Heatpump name</value>
+    <value>ILP:n nimi</value>
   </data>
   <data name="Heatpumps" xml:space="preserve">
-    <value>heatpumps</value>
+    <value>lämpöpumput</value>
   </data>
   <data name="IRSend" xml:space="preserve">
-    <value>send</value>
+    <value>lähetä</value>
   </data>
   <data name="NoHeatpumpsAndWiFi" xml:space="preserve">
-    <value>No heatpumps configured, and not connected to WiFi</value>
+    <value>Yhtään ILP:tä ei ole liitettynä, etkä ole kytkeytyneenä lähiverkkoon.</value>
   </data>
   <data name="NoWiFi" xml:space="preserve">
-    <value>No WiFi</value>
+    <value>Ei lähiverkkoa</value>
   </data>
   <data name="OperatingMode" xml:space="preserve">
-    <value>OPERATINGMODE</value>
+    <value>TOIMINTATILA</value>
   </data>
   <data name="PowerStateOFF" xml:space="preserve">
-    <value>Off</value>
+    <value>Pois päältä</value>
   </data>
   <data name="PowerStateON" xml:space="preserve">
-    <value>On</value>
+    <value>Päällä</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>save</value>
+    <value>tallenna</value>
   </data>
   <data name="SearchControllers" xml:space="preserve">
-    <value>search</value>
+    <value>etsi</value>
   </data>
   <data name="SearchForControllers" xml:space="preserve">
-    <value>Search for heatpump controllers?</value>
+    <value>Etsitäänkö ILP:n ohjaimia?</value>
   </data>
   <data name="SendingCommand" xml:space="preserve">
-    <value>Sending command...</value>
+    <value>Lähetetään komentoa...</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>settings</value>
+    <value>asetukset</value>
   </data>
   <data name="SettingsSaved" xml:space="preserve">
-    <value>Settings saved</value>
+    <value>Asetukset talletettu</value>
   </data>
   <data name="SettingsWiped" xml:space="preserve">
-    <value>Restored default settings</value>
+    <value>Oletusasetukset palautettu</value>
   </data>
   <data name="SSHAccount" xml:space="preserve">
-    <value>SSH account</value>
+    <value>SSH-tili</value>
   </data>
   <data name="SSHKey" xml:space="preserve">
-    <value>SSH key</value>
+    <value>SSH-tilin avain</value>
   </data>
   <data name="SSHPassword" xml:space="preserve">
-    <value>SSH password</value>
+    <value>SSH-tilin salasana</value>
   </data>
   <data name="SSHPort" xml:space="preserve">
-    <value>SSH server port</value>
+    <value>SSH-palvelimen portti</value>
   </data>
   <data name="SSHServer" xml:space="preserve">
-    <value>SSH server</value>
+    <value>SSH-palvelin</value>
   </data>
   <data name="SSHUseKey" xml:space="preserve">
-    <value>use key</value>
+    <value>käytä avainta</value>
   </data>
   <data name="SSHUsePassword" xml:space="preserve">
-    <value>use password</value>
+    <value>käytä salasanaa</value>
   </data>
   <data name="SSIDSetting" xml:space="preserve">
-    <value>Home Wifi SSID</value>
+    <value>Kotiverkon SSID</value>
   </data>
   <data name="Temperature" xml:space="preserve">
-    <value>TEMPERATURE</value>
+    <value>LÄMPÖTILA</value>
   </data>
   <data name="UDPBroadcastSetting" xml:space="preserve">
-    <value>UDP broadcast command</value>
+    <value>UDP-broadcast komento</value>
   </data>
   <data name="WipeSettings" xml:space="preserve">
-    <value>restore default settings</value>
+    <value>palauta oletusasetukset</value>
   </data>
 </root>

@@ -27,15 +27,16 @@
         <converter:BooleanToOnOff x:Key="BooleanToOnOff" />
     </phone:PhoneApplicationPage.Resources>
 
+    
     <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="true" IsVisible="False" Text="Lähetetään komentoa..." />
+        <shell:ProgressIndicator x:Name="ProgressBar" IsIndeterminate="true" IsVisible="False" Text="{Binding Path=LocalizedResources.SendingCommand, Source={StaticResource LocalizedStrings}}" />
     </shell:SystemTray.ProgressIndicator>
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <!--Pivot Control-->
 
-        <phone:Pivot x:Name="pivot" Title="ILP ETÄOHJAUS" ItemsSource="{Binding heatpumps}">
+        <phone:Pivot x:Name="pivot" Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" ItemsSource="{Binding heatpumps}">
             <phone:Pivot.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding titleText}" />
@@ -56,24 +57,24 @@
                         </Grid.ColumnDefinitions>
 
                         <toolkit:ToggleSwitch x:Name="PowerState" Content="{Binding powerState,Converter={StaticResource BooleanToOnOff}}" VerticalAlignment="Bottom" IsChecked="{Binding powerState, Mode=TwoWay}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Click="PowerState_Click"/>
-   
+
                         <toolkitprimitives:LoopingSelector Name="modeSelector" DataSource="{Binding operatingModes}" Margin="12" Width="128" ItemSize="128,128" Grid.Column="0" Grid.Row="1" IsExpandedChanged="HandleSelectorIsExpandedChanged">
                             <toolkitprimitives:LoopingSelector.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
                                         <TextBlock Text="{Binding Converter={StaticResource IntToMode}}" FontSize="44" FontFamily="{StaticResource PhoneFontFamilySemiBold}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        <TextBlock Text="TOIMINTATILA" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                        <TextBlock Text="{Binding Path=LocalizedResources.OperatingMode, Source={StaticResource LocalizedStrings}}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                                     </Grid>
                                 </DataTemplate>
                             </toolkitprimitives:LoopingSelector.ItemTemplate>
                         </toolkitprimitives:LoopingSelector>
 
-                        <toolkitprimitives:LoopingSelector Name="temperetureSelector" DataSource="{Binding temperatures}" Margin="12" Width="128" ItemSize="128,128" Grid.Column="1" Grid.Row="1" IsExpandedChanged="HandleSelectorIsExpandedChanged">
+                        <toolkitprimitives:LoopingSelector Name="temperatureSelector" DataSource="{Binding temperatures}" Margin="12" Width="128" ItemSize="128,128" Grid.Column="1" Grid.Row="1" IsExpandedChanged="HandleSelectorIsExpandedChanged">
                             <toolkitprimitives:LoopingSelector.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
                                         <TextBlock Text="{Binding Converter={StaticResource IntToTemperature}}" FontSize="44" FontFamily="{StaticResource PhoneFontFamilySemiBold}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        <TextBlock Text="LÄMPÖTILA" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                        <TextBlock Text="{Binding Path=LocalizedResources.Temperature, Source={StaticResource LocalizedStrings}}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                                     </Grid>
                                 </DataTemplate>
                             </toolkitprimitives:LoopingSelector.ItemTemplate>
@@ -84,7 +85,7 @@
                                 <DataTemplate>
                                     <Grid>
                                         <TextBlock Text="{Binding Converter={StaticResource IntToFanSpeed}}" FontSize="44" FontFamily="{StaticResource PhoneFontFamilySemiBold}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        <TextBlock Text="PUHALLUS" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                        <TextBlock Text="{Binding Path=LocalizedResources.FanSpeed, Source={StaticResource LocalizedStrings}}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                                     </Grid>
                                 </DataTemplate>
                             </toolkitprimitives:LoopingSelector.ItemTemplate>
@@ -102,6 +103,7 @@
 
     </Grid>
 
+    <!-- ApplicationBar localization is on the .cs file -->
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <!-- The RSS icon is the closest one to IR send I could find... -->

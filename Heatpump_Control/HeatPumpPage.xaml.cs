@@ -11,6 +11,7 @@ using Microsoft.Phone.Notification;
 using System.Windows.Media;
 using System.ComponentModel;
 using System.Windows.Threading;
+using Heatpump_Control.Resources;
 
 namespace Heatpump_Control
 {
@@ -34,6 +35,15 @@ namespace Heatpump_Control
         // * in that case also the navigation history is cleaned, i.e. this page appears as the launch page
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            // Localize the appbar, this cannot be done with XAML bindings
+            var appBarButtons = this.ApplicationBar.Buttons as IList<IApplicationBarIconButton>;
+            appBarButtons[0].Text = AppResources.IRSend;
+
+            var appBarMenuItems = this.ApplicationBar.MenuItems as IList<IApplicationBarMenuItem>;
+            appBarMenuItems[0].Text = AppResources.HeatpumpControllers;
+            appBarMenuItems[1].Text = AppResources.ConnectionSettings;
+
+            // Navigate to the requested pivot page
             int heatpumpIndex = Int32.Parse(this.NavigationContext.QueryString["heatpumpIndex"]);
 
             if (heatpumpIndex == -1)
@@ -164,7 +174,7 @@ namespace Heatpump_Control
                     // The progressbar doesn't stop running without this
                     Dispatcher.BeginInvoke(() =>
                     {
-                        MessageBox.Show(String.Format("Komento lähetetty"));
+                        MessageBox.Show(AppResources.CommandSent);
                     });
                 }
             );
@@ -183,7 +193,7 @@ namespace Heatpump_Control
                     // The progressbar doesn't stop running without this
                 Dispatcher.BeginInvoke(() =>
                 {
-                    MessageBox.Show(String.Format("Vastausta ei saatu"));
+                    MessageBox.Show(AppResources.CommandNoResponse);
                 });
             });
         }

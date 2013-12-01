@@ -1,3 +1,5 @@
 packages/
 Heatpump_Control/Bin/
 Heatpump_Control/obj/
+.nuget/
+*.suo

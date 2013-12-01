@@ -33,35 +33,36 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="ILP ETÄOHJAUS" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="asetukset" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.Settings, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
             <ScrollViewer>
                 <StackPanel x:Name="SettingsPanel" Grid.Row="0">
-                    <TextBlock Text="Kotiverkon SSID"/>
-                    <TextBox x:Name="SSIDSetting" Text="{Binding settings.SSIDSetting, Mode=TwoWay}"/>
-                    <TextBlock Text="UDP-broadcast komento"/>
-                    <TextBox x:Name="UDPBroadcastSetting" Text="{Binding settings.UDPBroadcastSetting, Mode=TwoWay}"/>
-                    <TextBlock Text="SSH-palvelin"/>
-                    <TextBox x:Name="SSHServer" Text="{Binding Path=settings.SSHServerSetting, Mode=TwoWay}"/>
-                    <TextBlock Text="SSH-palvelimen portti"/>
-                    <TextBox x:Name="SSHPort" InputScope="Number" Text="{Binding settings.SSHPortSetting, Mode=TwoWay}"/>
-                    <TextBlock Text="SSH-tili"/>
-                    <TextBox x:Name="SSHAccount" Text="{Binding settings.SSHAccountSetting, Mode=TwoWay}"/>
-                    <RadioButton x:Name="SSHUsePassword" IsChecked="{Binding settings.SSHUsePasswordSetting, Mode=TwoWay}" Content="käytä salasanaa"/>
-                    <TextBlock Text="SSH-tilin salasana" Visibility="{Binding ElementName=SSHUsePassword, Path=IsChecked, Converter={StaticResource BooleanToVisibility}, Mode=TwoWay}"/>
-                    <PasswordBox x:Name="SSHPassword" Password="{Binding settings.SSHPasswordSetting, Mode=TwoWay}" Visibility="{Binding ElementName=SSHUsePassword, Path=IsChecked, Converter={StaticResource BooleanToVisibility}}"/>
-                    <RadioButton x:Name="SSHUseKey" IsChecked="{Binding settings.SSHUseKeySetting, Mode=TwoWay}" Content="käytä avainta"/>
-                    <TextBlock Text="SSH-tilin avain" Visibility="{Binding ElementName=SSHUseKey, Path=IsChecked, Converter={StaticResource BooleanToVisibility}, Mode=TwoWay}"/>
-                    <TextBox x:Name="SSHKey" Text="{Binding settings.SSHKeySetting, Mode=TwoWay}" TextWrapping="NoWrap" AcceptsReturn="True" Visibility="{Binding ElementName=SSHUseKey, Path=IsChecked, Converter={StaticResource BooleanToVisibility}}" Height="500"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.SSIDSetting, Source={StaticResource LocalizedStrings}}"/>
+                    <TextBox Text="{Binding settings.SSIDSetting, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.UDPBroadcastSetting, Source={StaticResource LocalizedStrings}}"/>
+                    <TextBox Text="{Binding settings.UDPBroadcastSetting, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.SSHServer, Source={StaticResource LocalizedStrings}}"/>
+                    <TextBox Text="{Binding Path=settings.SSHServerSetting, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.SSHPort, Source={StaticResource LocalizedStrings}}"/>
+                    <TextBox InputScope="Number" Text="{Binding settings.SSHPortSetting, Mode=TwoWay}"/>
+                    <TextBlock Text="{Binding LocalizedResources.SSHAccount, Source={StaticResource LocalizedStrings}}"/>
+                    <TextBox Text="{Binding settings.SSHAccountSetting, Mode=TwoWay}"/>
+                    <RadioButton IsChecked="{Binding settings.SSHUsePasswordSetting, Mode=TwoWay}" Content="{Binding Path=LocalizedResources.SSHUsePassword, Source={StaticResource LocalizedStrings}}"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.SSHPassword, Source={StaticResource LocalizedStrings}}" Visibility="{Binding ElementName=SSHUsePassword, Path=IsChecked, Converter={StaticResource BooleanToVisibility}, Mode=TwoWay}"/>
+                    <PasswordBox Password="{Binding settings.SSHPasswordSetting, Mode=TwoWay}" Visibility="{Binding ElementName=SSHUsePassword, Path=IsChecked, Converter={StaticResource BooleanToVisibility}}"/>
+                    <RadioButton IsChecked="{Binding settings.SSHUseKeySetting, Mode=TwoWay}" Content="käytä avainta"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.SSHKey, Source={StaticResource LocalizedStrings}}" Visibility="{Binding ElementName=SSHUseKey, Path=IsChecked, Converter={StaticResource BooleanToVisibility}, Mode=TwoWay}"/>
+                    <TextBox Text="{Binding settings.SSHKeySetting, Mode=TwoWay}" TextWrapping="NoWrap" AcceptsReturn="True" Visibility="{Binding ElementName=SSHUseKey, Path=IsChecked, Converter={StaticResource BooleanToVisibility}}" Height="500"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
     </Grid>
 
+    <!-- ApplicationBar localization is on the .cs file -->
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <shell:ApplicationBarIconButton IconUri="icons\save.png" Text="tallenna" Click="SaveSettings_Click"/>

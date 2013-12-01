@@ -4,6 +4,7 @@
   <Languages xmlns="">
     <Language code="fi-FI" />
     <Language code="fi" />
+    <Language code="en" />
   </Languages>
   <App xmlns="" ProductID="{5ba6b2e3-0677-4659-b402-6ca7089c1973}" Title="ILP:n etäohjaus" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="ToniA" Description="Sample description" Publisher="Heatpump_Control" PublisherID="{c548fc42-07db-4152-9720-cec26968b18d}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
@@ -20,7 +21,7 @@
           <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
           <Count>0</Count>
           <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
-          <Title>Heatpump_Control</Title>
+          <Title>ILP:n etäohjaus</Title>
           <BackContent>
           </BackContent>
           <BackBackgroundImageURI>

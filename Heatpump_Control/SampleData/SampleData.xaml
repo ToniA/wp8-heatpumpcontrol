@@ -5,15 +5,54 @@
     xmlns:vm="clr-namespace:Heatpump_Control">
 
     <vm:MainViewModel.heatpumps>
-        <vm:Heatpump titleText="Alakerta" controllerIdentity="02:26:89:28:25:C5" powerState="True" expanded="True" notExpanded="False" heatpumpDisplayName="Panasonic CKP">
+        <vm:Heatpump titleText="Downstairs" controllerIdentity="02:26:89:28:25:C5" powerState="True" expanded="True" notExpanded="False" heatpumpDisplayName="Panasonic CKP">
             <vm:Heatpump.operatingModes>
-                <vm:NumbersDataSource Minimum="1" Maximum="5" Default="1"/>
+                <vm:NumbersDataSource>
+                    <vm:NumbersDataSource.Minimum>
+                        <sys:Int32>1</sys:Int32>
+                    </vm:NumbersDataSource.Minimum>
+                    <vm:NumbersDataSource.Maximum>
+                        <sys:Int32>5</sys:Int32>
+                    </vm:NumbersDataSource.Maximum>
+                    <vm:NumbersDataSource.Default>
+                        <sys:Int32>1</sys:Int32>
+                    </vm:NumbersDataSource.Default>
+                    <vm:NumbersDataSource.SelectedItem>
+                        <sys:Int32>1</sys:Int32>
+                    </vm:NumbersDataSource.SelectedItem>
+                </vm:NumbersDataSource>
             </vm:Heatpump.operatingModes>
             <vm:Heatpump.temperatures>
-                <vm:NumbersDataSource Minimum="16" Maximum="30" Default="22"/>
+                <vm:NumbersDataSource>
+                    <vm:NumbersDataSource.Minimum>
+                        <sys:Int32>16</sys:Int32>
+                    </vm:NumbersDataSource.Minimum>
+                    <vm:NumbersDataSource.Maximum>
+                        <sys:Int32>30</sys:Int32>
+                    </vm:NumbersDataSource.Maximum>
+                    <vm:NumbersDataSource.Default>
+                        <sys:Int32>22</sys:Int32>
+                    </vm:NumbersDataSource.Default>
+                    <vm:NumbersDataSource.SelectedItem>
+                        <sys:Int32>22</sys:Int32>
+                    </vm:NumbersDataSource.SelectedItem>
+                </vm:NumbersDataSource>
             </vm:Heatpump.temperatures>
             <vm:Heatpump.fanSpeeds>
-                <vm:NumbersDataSource Minimum="1" Maximum="6" Default="1"/>
+                <vm:NumbersDataSource>
+                    <vm:NumbersDataSource.Minimum>
+                        <sys:Int32>1</sys:Int32>
+                    </vm:NumbersDataSource.Minimum>
+                    <vm:NumbersDataSource.Maximum>
+                        <sys:Int32>6</sys:Int32>
+                    </vm:NumbersDataSource.Maximum>
+                    <vm:NumbersDataSource.Default>
+                        <sys:Int32>1</sys:Int32>
+                    </vm:NumbersDataSource.Default>
+                    <vm:NumbersDataSource.SelectedItem>
+                        <sys:Int32>1</sys:Int32>
+                    </vm:NumbersDataSource.SelectedItem>                    
+                </vm:NumbersDataSource>
             </vm:Heatpump.fanSpeeds>
             <vm:Heatpump.heatpumpTypeNames>
                 <sys:String>Panasonic CKP</sys:String>
@@ -25,7 +64,7 @@
             </vm:Heatpump.selectedTypeIndex>
         </vm:Heatpump>
 
-        <vm:Heatpump titleText="Yläkerta" controllerIdentity="02:26:89:28:25:C6" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Panasonic DKE">
+        <vm:Heatpump titleText="Upstairs" controllerIdentity="02:26:89:28:25:C6" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Panasonic DKE">
             <vm:Heatpump.heatpumpTypeNames>
                 <sys:String>Panasonic CKP</sys:String>
                 <sys:String>Panasonic DKE</sys:String>
@@ -35,7 +74,7 @@
                 <sys:Int32>1</sys:Int32>
             </vm:Heatpump.selectedTypeIndex>
         </vm:Heatpump>
-        <vm:Heatpump titleText="Autotalli" controllerIdentity="02:26:89:28:25:C7" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Ultimate Pro Plus 13 FP">
+        <vm:Heatpump titleText="Garage" controllerIdentity="02:26:89:28:25:C7" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Ultimate Pro Plus 13 FP">
             <vm:Heatpump.heatpumpTypeNames>
                 <sys:String>Panasonic CKP</sys:String>
                 <sys:String>Panasonic DKE</sys:String>
@@ -60,4 +99,3 @@
             SSHKeySetting = "-----BEGIN RSA PRIVATE KEY-----"/>
     </vm:MainViewModel.settings>
 </vm:MainViewModel>
-

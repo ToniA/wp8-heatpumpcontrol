@@ -8,6 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using System.Windows.Threading;
+using Heatpump_Control.Resources;
 
 namespace Heatpump_Control
 {
@@ -30,6 +31,14 @@ namespace Heatpump_Control
         // * If not, take the shortcut action to identify immediately
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            // Localize the appbar, this cannot be done with XAML bindings
+            var appBarButtons = this.ApplicationBar.Buttons as IList<IApplicationBarIconButton>;
+            appBarButtons[0].Text = AppResources.Save;
+
+            var appBarMenuItems = this.ApplicationBar.MenuItems as IList<IApplicationBarMenuItem>;
+            appBarMenuItems[0].Text = AppResources.SearchControllers;
+
+            
             if (App.ViewModel.heatpumps.Count == 0)
             {
                 Send_Identify();
@@ -146,7 +155,7 @@ namespace Heatpump_Control
                 // The progressbar doesn't stop running without this
                 Dispatcher.BeginInvoke(() =>
                 {
-                    MessageBox.Show(String.Format("Ohjaimia ei löydetty"));
+                    MessageBox.Show(AppResources.ControllersNotFound);
                 });
             });
         }

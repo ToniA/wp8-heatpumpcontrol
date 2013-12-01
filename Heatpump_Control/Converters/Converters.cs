@@ -2,6 +2,7 @@
 using System.Windows.Data;
 using System.Windows;
 using System.Globalization;
+using Heatpump_Control.Resources;
 
 namespace Heatpump_Control.Converters
 {
@@ -128,10 +129,10 @@ namespace Heatpump_Control.Converters
                 bool v = (bool)value;
                 if (v)
                 {
-                    return "Päällä";
+                    return AppResources.PowerStateON;
                 }
 
-                return "Pois päältä";
+                return AppResources.PowerStateOFF;
             }
             return null;
         }

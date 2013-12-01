@@ -79,9 +79,13 @@ namespace Heatpump_Control
             }
         }
 
-
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            // Localize the appbar, this cannot be done with XAML bindings
+            var appBarMenuItems = this.ApplicationBar.MenuItems as IList<IApplicationBarMenuItem>;
+            appBarMenuItems[0].Text = AppResources.HeatpumpControllers;
+            appBarMenuItems[1].Text = AppResources.ConnectionSettings;
+            
             //setting datacontext empty at first to force a refresh
             DataContext = null;
             DataContext = App.ViewModel;
@@ -91,7 +95,6 @@ namespace Heatpump_Control
                 UIShortcuts();
             }
         }
-
 
         // When the app is started for the first time, the ChannelUri exists only after this event has fired
         void PushChannel_ChannelUriUpdated(object sender, NotificationChannelUriEventArgs e)
@@ -140,22 +143,6 @@ namespace Heatpump_Control
             }
         }
 
-        // Sample code for building a localized ApplicationBar
-        //private void BuildLocalizedApplicationBar()
-        //{
-        //    // Set the page's ApplicationBar to a new instance of ApplicationBar.
-        //    ApplicationBar = new ApplicationBar();
-
-        //    // Create a new button and set the text value to the localized string from AppResources.
-        //    ApplicationBarIconButton appBarButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.add.rest.png", UriKind.Relative));
-        //    appBarButton.Text = AppResources.AppBarButtonText;
-        //    ApplicationBar.Buttons.Add(appBarButton);
-
-        //    // Create a new menu item with the localized string from AppResources.
-        //    ApplicationBarMenuItem appBarMenuItem = new ApplicationBarMenuItem(AppResources.AppBarMenuItemText);
-        //    ApplicationBar.MenuItems.Add(appBarMenuItem);
-        //}
-
 
         // UI shortcuts
         // * no pumps -> go to controller page
@@ -166,15 +153,16 @@ namespace Heatpump_Control
             {
                 if (SSID == null)
                 {
-                    MessageBox.Show("Yhtään ILP:tä ei ole liitettynä, etkä ole kytkeytyneenä lähiverkkoon.", "Ei lähiverkkoa", MessageBoxButton.OK);
+                    MessageBox.Show(AppResources.NoHeatpumpsAndWiFi, AppResources.NoWiFi, MessageBoxButton.OK);
 
                     while (NavigationService.BackStack.Any())
                         NavigationService.RemoveBackEntry();
                     NavigationService.GoBack();
                 }
 
-                if (MessageBox.Show("Olet kytkeytynyt lähiverkkoon jonka SSID on '" + SSID + "'.", "Etsitäänkö ILP:n ohjaimia?", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                if (MessageBox.Show(AppResources.ConnectedToSSID + " '" + SSID + "'.", AppResources.SearchForControllers, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                 {
+                    App.ViewModel.settings.SSIDSetting = SSID;
                     this.NavigationService.Navigate(new Uri("/HeatpumpControllerPage.xaml", UriKind.Relative));
                 }
             }

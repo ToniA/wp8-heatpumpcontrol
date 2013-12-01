@@ -36,8 +36,8 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="ILP ETÄOHJAUS" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock Text="kontrollerit" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.HeatpumpControllers, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
          <!--ContentPanel - place additional content here-->
@@ -47,27 +47,22 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0,0,0,17">
-                            <TextBlock Text="Kontrollerin ID" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.HeatpumpControllerID, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
                             <TextBlock Text="{Binding controllerIdentity}" TextWrapping="NoWrap" Style="{StaticResource PhoneTextExtraLargeStyle}" Tap="ControllerList_Tap"/>
                             <StackPanel Visibility="{Binding notExpanded,Converter={StaticResource BooleanToVisibility}}">
                                 <TextBlock Name="HeatpumpType" Text="{Binding heatpumpDisplayName, Mode=TwoWay}" TextWrapping="Wrap" Margin="12,-6,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                                 <TextBlock Text="{Binding titleText}" TextWrapping="Wrap" Margin="12,-6,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                             </StackPanel>
                             <StackPanel Visibility="{Binding expanded,Converter={StaticResource BooleanToVisibility}}">
-                                <TextBlock Text="ILP:n malli" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                <TextBlock Text="{Binding Path=LocalizedResources.HeatpumpModel, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
 
                                 <toolkit:ListPicker Name="HeatpumpTypePicker">
                                     <toolkit:ListPicker.ItemsSource>
                                         <Binding Path="heatpumpTypeNames" Mode="OneWay"/>
                                     </toolkit:ListPicker.ItemsSource>
-<!-- 
-I just can't figure out how to make this work in XAML designer view,
-but it works fine in the code
--->
                                     <toolkit:ListPicker.SelectedIndex>
                                         <Binding Path="selectedTypeIndex" Mode="TwoWay"/>
                                     </toolkit:ListPicker.SelectedIndex>
-
                                     <toolkit:ListPicker.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding}" />
@@ -75,7 +70,7 @@ but it works fine in the code
                                     </toolkit:ListPicker.ItemTemplate>
                                 </toolkit:ListPicker>
 
-                                <TextBlock Text="ILP:n nimi" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                                <TextBlock Text="{Binding Path=LocalizedResources.HeatpumpName, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
                                 <TextBox Text="{Binding titleText, Mode=TwoWay}" InputScope="Text"/>
                             </StackPanel>
                             
@@ -91,15 +86,14 @@ but it works fine in the code
 
     </Grid>
 
+    <!-- ApplicationBar localization is on the .cs file -->
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
             <shell:ApplicationBarIconButton IconUri="icons\save.png" Text="tallenna" Click="SaveHeatpumps_Click"/>
             <shell:ApplicationBar.MenuItems>
-                <shell:ApplicationBarMenuItem Text="etsi" Click="SearchControllers_Click" />
+                <shell:ApplicationBarMenuItem x:Name="SearchControllers" Text="etsi" Click="SearchControllers_Click" />
             </shell:ApplicationBar.MenuItems>
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
-
-
 
 </phone:PhoneApplicationPage>
