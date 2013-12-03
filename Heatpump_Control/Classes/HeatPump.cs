@@ -22,22 +22,38 @@ namespace Heatpump_Control
     [DataContract]
     public class HeatpumpType
     {
+        // Panasonic CKP constants
+        public const int PanasonicCKPModes = 5;
+        public const int PanasonicCKPMaxFan = 6; // AUTO + 5 speeds
+
+        // Panasonic DKE constants
+        public const int PanasonicDKEModes = 5;
+        public const int PanasonicDKEMaxFan = 6; // AUTO + 5 speeds
+
+        // Midea (Ultimate Pro Plus 13 FP) constants
+        public const int MideaModes = 6;
+        public const int MideaMaxFan = 4; // AUTO + 3 speeds
+
+
         [DataMember]
         public string name { get; set; }
         [DataMember]
         public string displayName { get; set; }
         [DataMember]
         public int numberOfModes { get; set; }
+        [DataMember]
+        public int numberOfFanSpeeds { get; set; }
 
         public HeatpumpType()
         {
         }
 
-        public HeatpumpType(string name, string displayName, int numberOfModes)
+        public HeatpumpType(string name, string displayName, int numberOfModes, int numberOfFanSpeeds)
         {
             this.name = name;
             this.displayName = displayName;
             this.numberOfModes = numberOfModes;
+            this.numberOfFanSpeeds = numberOfFanSpeeds;
         }
 
         // Without this the ListPicker doesn't show up properly in the designer, but throws
@@ -73,10 +89,22 @@ namespace Heatpump_Control
             heatpumpTypes = new List<HeatpumpType>();
         }
 
-        public void Add(HeatpumpType heatpumpType)
+        public void Add(string heatpumpTypeName)
         {
-            this.heatpumpTypes.Add(heatpumpType);
+            if (heatpumpTypeName.Equals("panasonic_ckp"))
+            {
+                heatpumpTypes.Add(new HeatpumpType("panasonic_ckp", "Panasonic CKP", HeatpumpType.PanasonicCKPModes, HeatpumpType.PanasonicCKPMaxFan));
+            }
+            else if (heatpumpTypeName.Equals("panasonic_dke"))
+            {
+                heatpumpTypes.Add(new HeatpumpType("panasonic_dke", "Panasonic DKE", HeatpumpType.PanasonicDKEModes, HeatpumpType.PanasonicDKEMaxFan));
+            }
+            else if (heatpumpTypeName.Equals("midea"))
+            {
+                heatpumpTypes.Add(new HeatpumpType("midea", "Ultimate Pro Plus 13FP", HeatpumpType.MideaModes, HeatpumpType.MideaMaxFan));
+            }
         }
+
 
         public List<string> getHeatpumpTypes()
         {
@@ -98,6 +126,10 @@ namespace Heatpump_Control
         private HeatpumpTypes _heatpumpTypes = new HeatpumpTypes();
         [DataMember]
         private int _pumpTypeIndex = 0;
+
+        // Saved while in maintenance heat mode
+        private int _temperatureSaved;
+        private int _fanSpeedSaved;
 
         private ILoopingSelectorDataSource _operatingModes;
         private ILoopingSelectorDataSource _temperatures;
@@ -150,9 +182,9 @@ namespace Heatpump_Control
             // In a later phase the idea is that the controller tells which types it supports
             // For now, let's just hardwire them here
 
-            heatpumpTypes.heatpumpTypes.Add(new HeatpumpType("panasonic_ckp", "Panasonic CKP", 5));
-            heatpumpTypes.heatpumpTypes.Add(new HeatpumpType("panasonic_dke", "Panasonic DKE", 5));
-            heatpumpTypes.heatpumpTypes.Add(new HeatpumpType("midea", "Ultimate Pro Plus 13FP", 6));
+            heatpumpTypes.Add("panasonic_ckp");
+            heatpumpTypes.Add("panasonic_dke");
+            heatpumpTypes.Add("midea");
         }
 
         public void SetNotifications()
@@ -160,37 +192,39 @@ namespace Heatpump_Control
             this._operatingModes.SelectionChanged += operatingModes_SelectionChanged;
         }
 
-        // Change the temperature values when the mode goes to 'maintenance'
+
+        // Change the allowed temperature and fan speed values when the mode goes to 'maintenance'
         public void operatingModes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var operatingMode = sender as NumbersDataSource;
 
             if ((int)operatingMode.SelectedItem == 6)
             {
+                this._temperatureSaved = (int)this.temperatures.SelectedItem;
                 this.temperatures.Minimum = 10;
                 this.temperatures.Maximum = 10;
                 this.temperatures.SelectedItem = 10;
 
+                this._fanSpeedSaved = (int)this.fanSpeeds.SelectedItem;
                 this.fanSpeeds.Minimum = 4;
                 this.fanSpeeds.Maximum = 4;
                 this.fanSpeeds.SelectedItem = 4;
             }
-            else
+            else if ((int)(e.RemovedItems[0]) == 6)
             {
                 this.temperatures.Minimum = 16;
                 this.temperatures.Maximum = 30;
-                this.temperatures.SelectedItem = 22;
+                this.temperatures.SelectedItem = (this._temperatureSaved >= this.temperatures.Minimum) ? 
+                     this._temperatureSaved : this.temperatures.Default;
 
                 this.fanSpeeds.Minimum = 1;
                 this.fanSpeeds.Maximum = 6;
-                this.fanSpeeds.SelectedItem = 2;
+                this.fanSpeeds.SelectedItem = (this._fanSpeedSaved >= this.fanSpeeds.Minimum) ?
+                    this._fanSpeedSaved : this.fanSpeeds.Default;
             }
 
             NotifyPropertyChanged("temperatures");
             NotifyPropertyChanged("fanSpeeds");
-
-
-            System.Diagnostics.Debug.WriteLine("notify called");
         }
 
         // Whether the pump is in expanded state or not on the HeatpumpControllerPage
@@ -328,19 +362,26 @@ namespace Heatpump_Control
                 if (_pumpTypeIndex != value)
                 {
                     _pumpTypeIndex = value;
-                    NotifyPropertyChanged("heatpumpType");
-                    NotifyPropertyChanged("heatpumpTypeName");
-                    NotifyPropertyChanged("heatpumpDisplayName");
-
 
                     // Only offer maintenance mode on models which support it
-
                     ((NumbersDataSource)operatingModes).Maximum = heatpumpTypes.heatpumpTypes[value].numberOfModes;
 
                     if ((int)operatingModes.SelectedItem > ((NumbersDataSource)operatingModes).Maximum)
                     {
                         operatingModes.SelectedItem = ((NumbersDataSource)operatingModes).Maximum;
                     }
+
+                    // Only offer the number of fanspeeds the model supports
+                    ((NumbersDataSource)fanSpeeds).Maximum = heatpumpTypes.heatpumpTypes[value].numberOfFanSpeeds;
+                    if ((int)fanSpeeds.SelectedItem > ((NumbersDataSource)fanSpeeds).Maximum)
+                    {
+                        fanSpeeds.SelectedItem = ((NumbersDataSource)fanSpeeds).Maximum;
+                    }
+
+                    NotifyPropertyChanged("heatpumpType");
+                    NotifyPropertyChanged("heatpumpTypeName");
+                    NotifyPropertyChanged("heatpumpDisplayName");
+                    NotifyPropertyChanged("fanSpeeds");
                 }
             }
         }
