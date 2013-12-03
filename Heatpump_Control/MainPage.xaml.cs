@@ -86,7 +86,7 @@ namespace Heatpump_Control
             appBarMenuItems[0].Text = AppResources.HeatpumpControllers;
             appBarMenuItems[1].Text = AppResources.ConnectionSettings;
             
-            //setting datacontext empty at first to force a refresh
+            // Set the datacontext empty at first to force a refresh
             DataContext = null;
             DataContext = App.ViewModel;
 

@@ -28,6 +28,12 @@ namespace Heatpump_Control
                 receiveCommandHandler commandHandler = handleCommandResponse;
                 App.ViewModel.rawNotificationHandlers.Add("command", commandHandler);
             }
+
+            // Set the operating mode notifications on
+            foreach (var heatpump in App.ViewModel.heatpumps)
+            {
+                heatpump.SetNotifications();
+            }
         }
 
         // Navigate to the requested pivot page, or first page requested page is '-1'
@@ -67,7 +73,7 @@ namespace Heatpump_Control
             if ((bool)e.NewValue)
             {
                 // Collapse all LoopingSelectors except the one which sent the event
-                CollapseLoopingSelectors(pivot, (DependencyObject)sender);
+                UnExpandLoopingSelectors(pivot, (DependencyObject)sender);
             }
         }
 
@@ -75,15 +81,16 @@ namespace Heatpump_Control
         private void PowerState_Click(object sender, RoutedEventArgs e)
         {
             // Collapse all LoopingSelectors
-            CollapseLoopingSelectors(pivot, null);
+            UnExpandLoopingSelectors(pivot, null);
         }
 
         // Search all LoopingSelectors which are childred of the targetElement
         // * if the found LoopingSelector is not the 'thisElement', collapse it
-        private void CollapseLoopingSelectors(DependencyObject targetElement, DependencyObject thisElement)
+        private void UnExpandLoopingSelectors(DependencyObject targetElement, DependencyObject thisElement)
         {
             if (targetElement == thisElement)
                 return;
+
             if (targetElement is Microsoft.Phone.Controls.Primitives.LoopingSelector)
             {
                 ((Microsoft.Phone.Controls.Primitives.LoopingSelector)(targetElement)).IsExpanded = false;
@@ -97,10 +104,9 @@ namespace Heatpump_Control
             for (int i = 0; i < count; i++)
             {
                 DependencyObject child = VisualTreeHelper.GetChild(targetElement, i);
-                CollapseLoopingSelectors(child, thisElement);
+                UnExpandLoopingSelectors(child, thisElement);
             }
         }
-
 
         //
         // Navigate to the Settings page
@@ -122,7 +128,7 @@ namespace Heatpump_Control
         private void Send_Command(object sender, EventArgs e)
         {
             // Collapse all LoopingSelectors
-            CollapseLoopingSelectors(pivot, null);
+            UnExpandLoopingSelectors(pivot, null);
 
             // Save the heatpump state
             App.ViewModel.settings.HeatpumpsSettings = JsonFunctions.SerializeHeatpumps(App.ViewModel.heatpumps);

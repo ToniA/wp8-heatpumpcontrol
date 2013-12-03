@@ -6,6 +6,9 @@
 
     <vm:MainViewModel.heatpumps>
         <vm:Heatpump titleText="Downstairs" controllerIdentity="02:26:89:28:25:C5" powerState="True" expanded="True" notExpanded="False" heatpumpDisplayName="Panasonic CKP">
+            <vm:Heatpump.fakeVisibility>
+                <Visibility>Visible</Visibility>
+            </vm:Heatpump.fakeVisibility>
             <vm:Heatpump.operatingModes>
                 <vm:NumbersDataSource>
                     <vm:NumbersDataSource.Minimum>
@@ -18,8 +21,11 @@
                         <sys:Int32>1</sys:Int32>
                     </vm:NumbersDataSource.Default>
                     <vm:NumbersDataSource.SelectedItem>
-                        <sys:Int32>1</sys:Int32>
+                        <sys:Object>1</sys:Object>
                     </vm:NumbersDataSource.SelectedItem>
+                    <vm:NumbersDataSource.IsSelectedValue>
+                        <sys:Boolean>True</sys:Boolean>
+                    </vm:NumbersDataSource.IsSelectedValue>
                 </vm:NumbersDataSource>
             </vm:Heatpump.operatingModes>
             <vm:Heatpump.temperatures>

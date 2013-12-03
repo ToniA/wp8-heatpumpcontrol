@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.IO.IsolatedStorage;
 using Microsoft.Phone.Notification;
+using System.ComponentModel;
 
 
 namespace Heatpump_Control
 {
-    public class Settings
+    public class Settings : INotifyPropertyChanged
     {
         public Settings()
         {
@@ -70,6 +71,8 @@ namespace Heatpump_Control
                     // Store the new value
                     settings[Key] = value;
                     valueChanged = true;
+
+                    NotifyPropertyChanged(Key);
                 }
             }
             // Otherwise create the key.
@@ -255,5 +258,20 @@ namespace Heatpump_Control
                 AddOrUpdateValue(SettingsSavedKeyName, value);
             }
         }
+
+
+        #region INotifyPropertyChanged Members
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        #endregion
     }
 }

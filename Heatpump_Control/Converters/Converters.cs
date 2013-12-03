@@ -26,6 +26,8 @@ namespace Heatpump_Control.Converters
                         return "DRY";
                     case 5:
                         return "FAN";
+                    case 6:
+                        return "HEAT\n+10°";
                 }
             }
 

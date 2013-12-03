@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using Microsoft.Phone.Controls;
 using System.Windows.Markup;
-
+using System.Windows;
+using System.Windows.Controls;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Collections.Specialized;
-
+using Microsoft.Phone.Controls.Primitives;
 
 namespace Heatpump_Control
 {
@@ -25,15 +26,18 @@ namespace Heatpump_Control
         public string name { get; set; }
         [DataMember]
         public string displayName { get; set; }
+        [DataMember]
+        public int numberOfModes { get; set; }
 
         public HeatpumpType()
         {
         }
 
-        public HeatpumpType(string name, string displayName)
+        public HeatpumpType(string name, string displayName, int numberOfModes)
         {
             this.name = name;
             this.displayName = displayName;
+            this.numberOfModes = numberOfModes;
         }
 
         // Without this the ListPicker doesn't show up properly in the designer, but throws
@@ -49,6 +53,12 @@ namespace Heatpump_Control
 
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            return this.name.GetHashCode();
+        }
+
     }
 
     [DataContract]
@@ -89,16 +99,32 @@ namespace Heatpump_Control
         [DataMember]
         private int _pumpTypeIndex = 0;
 
+        private ILoopingSelectorDataSource _operatingModes;
+        private ILoopingSelectorDataSource _temperatures;
+        private ILoopingSelectorDataSource _fanSpeeds;
+
         // Public properties 
         [DataMember]
         public string controllerIdentity { get; set; }
-        [DataMember]
-        public NumbersDataSource operatingModes { get; set; }
-        [DataMember]
-        public NumbersDataSource temperatures { get; set; }
-        [DataMember]
-        public NumbersDataSource fanSpeeds { get; set; }
 
+        [DataMember]
+        public NumbersDataSource operatingModes
+        {
+            get { return (NumbersDataSource)_operatingModes; }
+            set { _operatingModes = value; }
+        }
+        [DataMember]
+        public NumbersDataSource temperatures
+        {
+            get { return (NumbersDataSource)_temperatures; }
+            set { _temperatures = value; }
+        }
+        [DataMember]
+        public NumbersDataSource fanSpeeds
+        {
+            get { return (NumbersDataSource)_fanSpeeds; }
+            set { _fanSpeeds = value; }
+        }
 
         // Empty constructor for XAML
         public Heatpump()
@@ -116,17 +142,56 @@ namespace Heatpump_Control
             this._pumpTypeIndex = 0;
 
             this.operatingModes = new NumbersDataSource() { Minimum = 1, Maximum = 5, Default = 2 };
+            this._operatingModes.SelectionChanged += operatingModes_SelectionChanged;
+
             this.temperatures = new NumbersDataSource() { Minimum = 16, Maximum = 30, Default = 23 };
             this.fanSpeeds = new NumbersDataSource() { Minimum = 1, Maximum = 6, Default = 1 };
 
             // In a later phase the idea is that the controller tells which types it supports
             // For now, let's just hardwire them here
 
-            heatpumpTypes.heatpumpTypes.Add(new HeatpumpType("panasonic_ckp", "Panasonic CKP"));
-            heatpumpTypes.heatpumpTypes.Add(new HeatpumpType("panasonic_dke", "Panasonic DKE"));
-            heatpumpTypes.heatpumpTypes.Add(new HeatpumpType("midea", "Ultimate Pro Plus 13FP"));
+            heatpumpTypes.heatpumpTypes.Add(new HeatpumpType("panasonic_ckp", "Panasonic CKP", 5));
+            heatpumpTypes.heatpumpTypes.Add(new HeatpumpType("panasonic_dke", "Panasonic DKE", 5));
+            heatpumpTypes.heatpumpTypes.Add(new HeatpumpType("midea", "Ultimate Pro Plus 13FP", 6));
         }
 
+        public void SetNotifications()
+        {
+            this._operatingModes.SelectionChanged += operatingModes_SelectionChanged;
+        }
+
+        // Change the temperature values when the mode goes to 'maintenance'
+        public void operatingModes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var operatingMode = sender as NumbersDataSource;
+
+            if ((int)operatingMode.SelectedItem == 6)
+            {
+                this.temperatures.Minimum = 10;
+                this.temperatures.Maximum = 10;
+                this.temperatures.SelectedItem = 10;
+
+                this.fanSpeeds.Minimum = 4;
+                this.fanSpeeds.Maximum = 4;
+                this.fanSpeeds.SelectedItem = 4;
+            }
+            else
+            {
+                this.temperatures.Minimum = 16;
+                this.temperatures.Maximum = 30;
+                this.temperatures.SelectedItem = 22;
+
+                this.fanSpeeds.Minimum = 1;
+                this.fanSpeeds.Maximum = 6;
+                this.fanSpeeds.SelectedItem = 2;
+            }
+
+            NotifyPropertyChanged("temperatures");
+            NotifyPropertyChanged("fanSpeeds");
+
+
+            System.Diagnostics.Debug.WriteLine("notify called");
+        }
 
         // Whether the pump is in expanded state or not on the HeatpumpControllerPage
         public Boolean expanded
@@ -141,6 +206,13 @@ namespace Heatpump_Control
                     NotifyPropertyChanged("notExpanded");
                 }
             }
+        }
+
+        // Visibility of the fake LoopingSelectors
+        public Visibility fakeVisibility
+        {
+            get { return Visibility.Collapsed; }
+            set { }
         }
 
         // Whether the pump is in collapsed state or not on the HeatpumpControllerPage
@@ -258,6 +330,17 @@ namespace Heatpump_Control
                     _pumpTypeIndex = value;
                     NotifyPropertyChanged("heatpumpType");
                     NotifyPropertyChanged("heatpumpTypeName");
+                    NotifyPropertyChanged("heatpumpDisplayName");
+
+
+                    // Only offer maintenance mode on models which support it
+
+                    ((NumbersDataSource)operatingModes).Maximum = heatpumpTypes.heatpumpTypes[value].numberOfModes;
+
+                    if ((int)operatingModes.SelectedItem > ((NumbersDataSource)operatingModes).Maximum)
+                    {
+                        operatingModes.SelectedItem = ((NumbersDataSource)operatingModes).Maximum;
+                    }
                 }
             }
         }

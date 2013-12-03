@@ -45,8 +45,9 @@
             <phone:Pivot.ItemTemplate>
                 <DataTemplate>
 
-                    <Grid ShowGridLines="False" Margin="12,0,12,0">
+                    <Grid ShowGridLines="False" Margin="12,-12,12,0">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
@@ -56,9 +57,20 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <toolkit:ToggleSwitch x:Name="PowerState" Content="{Binding powerState,Converter={StaticResource BooleanToOnOff}}" VerticalAlignment="Bottom" IsChecked="{Binding powerState, Mode=TwoWay}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Click="PowerState_Click"/>
+                        <TextBlock Name="HeatpumpType" Text="{Binding heatpumpDisplayName}" VerticalAlignment="Center" FontSize="14" Margin="12,0,0,0" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Height="26"/>
+                        <toolkit:ToggleSwitch Name="PowerState" Content="{Binding powerState,Converter={StaticResource BooleanToOnOff}}" VerticalAlignment="Bottom" Margin="12,-20,0,-30" IsChecked="{Binding powerState, Mode=TwoWay}" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Click="PowerState_Click"/>
 
-                        <toolkitprimitives:LoopingSelector Name="modeSelector" DataSource="{Binding operatingModes}" Margin="12" Width="128" ItemSize="128,128" Grid.Column="0" Grid.Row="1" IsExpandedChanged="HandleSelectorIsExpandedChanged">
+                        <!-- Until I figure out how to make SampleData.xaml work with
+                             the LoopingSelector, let's have a fake one to show the layout.
+                             This one is set to Visibility = Visibility.Collapsed in the code
+                        -->
+                        <toolkitprimitives:LoopingSelector Name="fakeModeSelector" Margin="12" Width="128" ItemSize="128,128" Grid.Column="0" Grid.Row="2" IsExpandedChanged="HandleSelectorIsExpandedChanged" IsExpanded="True">
+                            <toolkitprimitives:LoopingSelector.Visibility>
+                                <Binding Path="fakeVisibility"/>
+                            </toolkitprimitives:LoopingSelector.Visibility>
+                            <toolkitprimitives:LoopingSelector.DataSource>
+                                <local:NumbersDataSource Minimum="1" Maximum="6" Default="5"/>
+                            </toolkitprimitives:LoopingSelector.DataSource>
                             <toolkitprimitives:LoopingSelector.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -69,7 +81,29 @@
                             </toolkitprimitives:LoopingSelector.ItemTemplate>
                         </toolkitprimitives:LoopingSelector>
 
-                        <toolkitprimitives:LoopingSelector Name="temperatureSelector" DataSource="{Binding temperatures}" Margin="12" Width="128" ItemSize="128,128" Grid.Column="1" Grid.Row="1" IsExpandedChanged="HandleSelectorIsExpandedChanged">
+                        <!-- The real 'mode' LoopingSelector -->
+                        <toolkitprimitives:LoopingSelector Name="modeSelector" Margin="12" Width="128" ItemSize="128,128" Grid.Column="0" Grid.Row="2" IsExpandedChanged="HandleSelectorIsExpandedChanged">
+                            <toolkitprimitives:LoopingSelector.DataSource>
+                                <Binding Path="operatingModes"/>
+                            </toolkitprimitives:LoopingSelector.DataSource>
+                            <toolkitprimitives:LoopingSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Converter={StaticResource IntToMode}}" FontSize="44" FontFamily="{StaticResource PhoneFontFamilySemiBold}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Path=LocalizedResources.OperatingMode, Source={StaticResource LocalizedStrings}}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </toolkitprimitives:LoopingSelector.ItemTemplate>
+                        </toolkitprimitives:LoopingSelector>
+
+                        <!-- The fake 'temperature' LoopingSelector -->
+                        <toolkitprimitives:LoopingSelector Name="fakeTemperatureSelector" Margin="12" Width="128" ItemSize="128,128" Grid.Column="1" Grid.Row="2" IsExpandedChanged="HandleSelectorIsExpandedChanged" IsExpanded="True">
+                            <toolkitprimitives:LoopingSelector.Visibility>
+                                <Binding Path="fakeVisibility"/>
+                            </toolkitprimitives:LoopingSelector.Visibility>
+                            <toolkitprimitives:LoopingSelector.DataSource>
+                                <local:NumbersDataSource Minimum="16" Maximum="30" Default="22"/>
+                            </toolkitprimitives:LoopingSelector.DataSource>
                             <toolkitprimitives:LoopingSelector.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -80,7 +114,44 @@
                             </toolkitprimitives:LoopingSelector.ItemTemplate>
                         </toolkitprimitives:LoopingSelector>
 
-                        <toolkitprimitives:LoopingSelector Name="fanSpeedSelector" DataSource="{Binding fanSpeeds}" Margin="12" Width="128" ItemSize="128,128" Grid.Column="2" Grid.Row="1" IsExpandedChanged="HandleSelectorIsExpandedChanged">
+                        <!-- The real 'temperature' LoopingSelector -->
+                        <toolkitprimitives:LoopingSelector Name="temperatureSelector" Margin="12" Width="128" ItemSize="128,128" Grid.Column="1" Grid.Row="2" IsExpandedChanged="HandleSelectorIsExpandedChanged">
+                            <toolkitprimitives:LoopingSelector.DataSource>
+                                <Binding Path="temperatures"/>
+                            </toolkitprimitives:LoopingSelector.DataSource>
+                            <toolkitprimitives:LoopingSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Converter={StaticResource IntToTemperature}}" FontSize="44" FontFamily="{StaticResource PhoneFontFamilySemiBold}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Path=LocalizedResources.Temperature, Source={StaticResource LocalizedStrings}}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </toolkitprimitives:LoopingSelector.ItemTemplate>
+                        </toolkitprimitives:LoopingSelector>
+
+                        <!-- The fake 'fanspeed' LoopingSelector -->
+                        <toolkitprimitives:LoopingSelector Name="fakeFanSpeedSelector" Margin="12" Width="128" ItemSize="128,128" Grid.Column="2" Grid.Row="2" IsExpandedChanged="HandleSelectorIsExpandedChanged" IsExpanded="True">
+                            <toolkitprimitives:LoopingSelector.Visibility>
+                                <Binding Path="fakeVisibility"/>
+                            </toolkitprimitives:LoopingSelector.Visibility>
+                            <toolkitprimitives:LoopingSelector.DataSource>
+                                <local:NumbersDataSource Minimum="1" Maximum="6" Default="3"/>
+                            </toolkitprimitives:LoopingSelector.DataSource>
+                            <toolkitprimitives:LoopingSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding Converter={StaticResource IntToFanSpeed}}" FontSize="44" FontFamily="{StaticResource PhoneFontFamilySemiBold}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Path=LocalizedResources.FanSpeed, Source={StaticResource LocalizedStrings}}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </toolkitprimitives:LoopingSelector.ItemTemplate>
+                        </toolkitprimitives:LoopingSelector>
+
+                        <!-- The real 'fanspeed' LoopingSelector -->
+                        <toolkitprimitives:LoopingSelector Name="fanSpeedSelector" Margin="12" Width="128" ItemSize="128,128" Grid.Column="2" Grid.Row="2" IsExpandedChanged="HandleSelectorIsExpandedChanged">
+                            <toolkitprimitives:LoopingSelector.DataSource>
+                                <Binding Path="fanSpeeds"/>
+                            </toolkitprimitives:LoopingSelector.DataSource>
                             <toolkitprimitives:LoopingSelector.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
