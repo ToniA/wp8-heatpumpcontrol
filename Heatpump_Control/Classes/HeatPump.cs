@@ -30,10 +30,22 @@ namespace Heatpump_Control
         public const int PanasonicDKEModes = 5;
         public const int PanasonicDKEMaxFan = 6; // AUTO + 5 speeds
 
+        public const int PanasonicMinTemperature = 16;
+        public const int PanasonicMaxTemperature = 30;
+
         // Midea (Ultimate Pro Plus 13 FP) constants
         public const int MideaModes = 6;
         public const int MideaMaxFan = 4; // AUTO + 3 speeds
 
+        public const int MideaMinTemperature = 16;
+        public const int MideaMaxTemperature = 30;
+
+        // Carrier constants
+        public const int CarrierModes = 5;
+        public const int CarrierMaxFan = 6; // AUTO + 5 speeds
+
+        public const int CarrierMinTemperature = 17;
+        public const int CarrierMaxTemperature = 30;
 
         [DataMember]
         public string name { get; set; }
@@ -42,17 +54,23 @@ namespace Heatpump_Control
         [DataMember]
         public int numberOfModes { get; set; }
         [DataMember]
+        public int minTemperature { get; set; }
+        [DataMember]
+        public int maxTemperature { get; set; }
+        [DataMember]
         public int numberOfFanSpeeds { get; set; }
 
         public HeatpumpType()
         {
         }
 
-        public HeatpumpType(string name, string displayName, int numberOfModes, int numberOfFanSpeeds)
+        public HeatpumpType(string name, string displayName, int numberOfModes, int minTemperature, int maxTemperature, int numberOfFanSpeeds)
         {
             this.name = name;
             this.displayName = displayName;
             this.numberOfModes = numberOfModes;
+            this.minTemperature = minTemperature;
+            this.maxTemperature = maxTemperature;
             this.numberOfFanSpeeds = numberOfFanSpeeds;
         }
 
@@ -93,15 +111,35 @@ namespace Heatpump_Control
         {
             if (heatpumpTypeName.Equals("panasonic_ckp"))
             {
-                heatpumpTypes.Add(new HeatpumpType("panasonic_ckp", "Panasonic CKP", HeatpumpType.PanasonicCKPModes, HeatpumpType.PanasonicCKPMaxFan));
+                heatpumpTypes.Add(new HeatpumpType("panasonic_ckp", "Panasonic CKP", 
+                                  HeatpumpType.PanasonicCKPModes,
+                                  HeatpumpType.PanasonicMinTemperature,
+                                  HeatpumpType.PanasonicMaxTemperature,
+                                  HeatpumpType.PanasonicCKPMaxFan));
             }
             else if (heatpumpTypeName.Equals("panasonic_dke"))
             {
-                heatpumpTypes.Add(new HeatpumpType("panasonic_dke", "Panasonic DKE", HeatpumpType.PanasonicDKEModes, HeatpumpType.PanasonicDKEMaxFan));
+                heatpumpTypes.Add(new HeatpumpType("panasonic_dke", "Panasonic DKE",
+                                  HeatpumpType.PanasonicMinTemperature,
+                                  HeatpumpType.PanasonicMaxTemperature,
+                                  HeatpumpType.PanasonicDKEModes,
+                                  HeatpumpType.PanasonicDKEMaxFan));
             }
             else if (heatpumpTypeName.Equals("midea"))
             {
-                heatpumpTypes.Add(new HeatpumpType("midea", "Ultimate Pro Plus 13FP", HeatpumpType.MideaModes, HeatpumpType.MideaMaxFan));
+                heatpumpTypes.Add(new HeatpumpType("midea", "Ultimate Pro Plus 13FP", 
+                                  HeatpumpType.MideaModes,
+                                  HeatpumpType.MideaMinTemperature,
+                                  HeatpumpType.MideaMaxTemperature,
+                                  HeatpumpType.MideaMaxFan));
+            }
+            else if (heatpumpTypeName.Equals("carrier"))
+            {
+                heatpumpTypes.Add(new HeatpumpType("carrier", "Carrier",
+                                  HeatpumpType.CarrierModes,
+                                  HeatpumpType.CarrierMinTemperature,
+                                  HeatpumpType.CarrierMaxTemperature,
+                                  HeatpumpType.CarrierMaxFan));
             }
         }
 
@@ -185,6 +223,7 @@ namespace Heatpump_Control
             heatpumpTypes.Add("panasonic_ckp");
             heatpumpTypes.Add("panasonic_dke");
             heatpumpTypes.Add("midea");
+            heatpumpTypes.Add("carrier");
         }
 
         public void SetNotifications()
@@ -371,6 +410,18 @@ namespace Heatpump_Control
                         operatingModes.SelectedItem = ((NumbersDataSource)operatingModes).Maximum;
                     }
 
+                    // Only offer the number of temperatures the model supports
+                    ((NumbersDataSource)temperatures).Maximum = heatpumpTypes.heatpumpTypes[value].maxTemperature;
+                    ((NumbersDataSource)temperatures).Minimum = heatpumpTypes.heatpumpTypes[value].minTemperature;
+                    if ((int)temperatures.SelectedItem > ((NumbersDataSource)temperatures).Maximum)
+                    {
+                        temperatures.SelectedItem = ((NumbersDataSource)temperatures).Maximum;
+                    }
+                    if ((int)temperatures.SelectedItem < ((NumbersDataSource)temperatures).Minimum)
+                    {
+                        temperatures.SelectedItem = ((NumbersDataSource)temperatures).Maximum;
+                    }
+
                     // Only offer the number of fanspeeds the model supports
                     ((NumbersDataSource)fanSpeeds).Maximum = heatpumpTypes.heatpumpTypes[value].numberOfFanSpeeds;
                     if ((int)fanSpeeds.SelectedItem > ((NumbersDataSource)fanSpeeds).Maximum)
@@ -381,6 +432,7 @@ namespace Heatpump_Control
                     NotifyPropertyChanged("heatpumpType");
                     NotifyPropertyChanged("heatpumpTypeName");
                     NotifyPropertyChanged("heatpumpDisplayName");
+                    NotifyPropertyChanged("temperatures");
                     NotifyPropertyChanged("fanSpeeds");
                 }
             }
