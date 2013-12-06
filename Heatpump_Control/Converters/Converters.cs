@@ -50,6 +50,11 @@ namespace Heatpump_Control.Converters
         {
             if (value is int)
             {
+                if ((int)value == 0)
+                {
+                    return "";
+                }
+
                 return value.ToString() + "°C";
             }
 

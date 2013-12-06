@@ -237,7 +237,7 @@ namespace Heatpump_Control
         {
             var operatingMode = sender as NumbersDataSource;
 
-            if ((int)operatingMode.SelectedItem == 6)
+            if ((int)operatingMode.SelectedItem == 6) // Maintenance mode, only possible temperature is +10 and max fan speed
             {
                 this._temperatureSaved = (int)this.temperatures.SelectedItem;
                 this.temperatures.Minimum = 10;
@@ -245,21 +245,29 @@ namespace Heatpump_Control
                 this.temperatures.SelectedItem = 10;
 
                 this._fanSpeedSaved = (int)this.fanSpeeds.SelectedItem;
-                this.fanSpeeds.Minimum = 4;
-                this.fanSpeeds.Maximum = 4;
-                this.fanSpeeds.SelectedItem = 4;
+                this.fanSpeeds.Minimum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
+                this.fanSpeeds.Maximum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
+                this.fanSpeeds.SelectedItem = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
             }
-            else if ((int)(e.RemovedItems[0]) == 6)
+            else if ((int)operatingMode.SelectedItem == 5) // FAN mode, do not show the temperature setting in FAN mode
             {
-                this.temperatures.Minimum = 16;
-                this.temperatures.Maximum = 30;
-                this.temperatures.SelectedItem = (this._temperatureSaved >= this.temperatures.Minimum) ? 
+                this._temperatureSaved = (int)this.temperatures.SelectedItem;
+                this._fanSpeedSaved = (int)this.fanSpeeds.SelectedItem;
+                this.temperatures.Minimum = 0;
+                this.temperatures.Maximum = 0;
+                this.temperatures.SelectedItem = 0;
+            }
+            else if ((int)(e.RemovedItems[0]) == 5 || (int)(e.RemovedItems[0]) == 6)
+            {
+                this.temperatures.Minimum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].minTemperature;
+                this.temperatures.Maximum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].maxTemperature;
+                this.temperatures.SelectedItem = (this._temperatureSaved >= this.temperatures.Minimum) ?
                      this._temperatureSaved : this.temperatures.Default;
 
                 this.fanSpeeds.Minimum = 1;
-                this.fanSpeeds.Maximum = 6;
-                this.fanSpeeds.SelectedItem = (this._fanSpeedSaved >= this.fanSpeeds.Minimum) ?
-                    this._fanSpeedSaved : this.fanSpeeds.Default;
+                this.fanSpeeds.Maximum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
+                this.fanSpeeds.SelectedItem = (this._fanSpeedSaved < this.fanSpeeds.Maximum) ?
+                    this._fanSpeedSaved : this.fanSpeeds.Maximum;
             }
 
             NotifyPropertyChanged("temperatures");
