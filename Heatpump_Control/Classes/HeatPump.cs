@@ -143,8 +143,8 @@ namespace Heatpump_Control
                 this.temperatures.Items = this.heatpumpTypes[this.selectedTypeIndex].maintenance;
                 this.temperatures.SelectedItem = this.heatpumpTypes[this.selectedTypeIndex].maintenance[0];
 
-                this.fanSpeeds.Items = Enumerable.Range(this.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds, 1).ToList();
-                this.fanSpeeds.SelectedItem = this.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
+                this.fanSpeeds.Items = Enumerable.Range(this.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds - 1, 1).ToList();
+                this.fanSpeeds.SelectedItem = this.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds - 1;
             }
 
             // Fan mode was added -> set 'fan' values
