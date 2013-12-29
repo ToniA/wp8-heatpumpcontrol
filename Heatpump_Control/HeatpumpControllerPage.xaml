@@ -68,6 +68,11 @@
                                             <TextBlock Text="{Binding}" />
                                         </DataTemplate>
                                     </toolkit:ListPicker.ItemTemplate>
+                                    <toolkit:ListPicker.FullModeItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Style="{StaticResource PhoneTextExtraLargeStyle}" Text="{Binding}"/>
+                                        </DataTemplate>
+                                    </toolkit:ListPicker.FullModeItemTemplate>
                                 </toolkit:ListPicker>
 
                                 <TextBlock Text="{Binding Path=LocalizedResources.HeatpumpName, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
