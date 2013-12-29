@@ -233,4 +233,13 @@
   <data name="WipeSettings" xml:space="preserve">
     <value>restore default settings</value>
   </data>
+  <data name="EmptyHeatpumpName" xml:space="preserve">
+    <value>Heatpump name must be defined</value>
+  </data>
+  <data name="MustSelectType" xml:space="preserve">
+    <value>Heatpump type must be selected</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select...</value>
+  </data>
 </root>

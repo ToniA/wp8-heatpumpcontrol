@@ -9,86 +9,36 @@
             <vm:Heatpump.fakeVisibility>
                 <Visibility>Visible</Visibility>
             </vm:Heatpump.fakeVisibility>
-            <vm:Heatpump.operatingModes>
-                <vm:NumbersDataSource>
-                    <vm:NumbersDataSource.Minimum>
-                        <sys:Int32>1</sys:Int32>
-                    </vm:NumbersDataSource.Minimum>
-                    <vm:NumbersDataSource.Maximum>
-                        <sys:Int32>5</sys:Int32>
-                    </vm:NumbersDataSource.Maximum>
-                    <vm:NumbersDataSource.Default>
-                        <sys:Int32>1</sys:Int32>
-                    </vm:NumbersDataSource.Default>
-                    <vm:NumbersDataSource.SelectedItem>
-                        <sys:Object>1</sys:Object>
-                    </vm:NumbersDataSource.SelectedItem>
-                    <vm:NumbersDataSource.IsSelectedValue>
-                        <sys:Boolean>True</sys:Boolean>
-                    </vm:NumbersDataSource.IsSelectedValue>
-                </vm:NumbersDataSource>
-            </vm:Heatpump.operatingModes>
-            <vm:Heatpump.temperatures>
-                <vm:NumbersDataSource>
-                    <vm:NumbersDataSource.Minimum>
-                        <sys:Int32>16</sys:Int32>
-                    </vm:NumbersDataSource.Minimum>
-                    <vm:NumbersDataSource.Maximum>
-                        <sys:Int32>30</sys:Int32>
-                    </vm:NumbersDataSource.Maximum>
-                    <vm:NumbersDataSource.Default>
-                        <sys:Int32>22</sys:Int32>
-                    </vm:NumbersDataSource.Default>
-                    <vm:NumbersDataSource.SelectedItem>
-                        <sys:Int32>22</sys:Int32>
-                    </vm:NumbersDataSource.SelectedItem>
-                </vm:NumbersDataSource>
-            </vm:Heatpump.temperatures>
-            <vm:Heatpump.fanSpeeds>
-                <vm:NumbersDataSource>
-                    <vm:NumbersDataSource.Minimum>
-                        <sys:Int32>1</sys:Int32>
-                    </vm:NumbersDataSource.Minimum>
-                    <vm:NumbersDataSource.Maximum>
-                        <sys:Int32>6</sys:Int32>
-                    </vm:NumbersDataSource.Maximum>
-                    <vm:NumbersDataSource.Default>
-                        <sys:Int32>1</sys:Int32>
-                    </vm:NumbersDataSource.Default>
-                    <vm:NumbersDataSource.SelectedItem>
-                        <sys:Int32>1</sys:Int32>
-                    </vm:NumbersDataSource.SelectedItem>                    
-                </vm:NumbersDataSource>
-            </vm:Heatpump.fanSpeeds>
-            <vm:Heatpump.heatpumpTypeNames>
+            <vm:Heatpump.heatpumpTypeNamesGUI>
+                <sys:String>Select...</sys:String>
                 <sys:String>Panasonic CKP</sys:String>
                 <sys:String>Panasonic DKE</sys:String>
                 <sys:String>Ultimate Pro Plus 13 FP</sys:String>
-            </vm:Heatpump.heatpumpTypeNames>
-            <vm:Heatpump.selectedTypeIndex>
+            </vm:Heatpump.heatpumpTypeNamesGUI>
+            <vm:Heatpump.selectedTypeIndexGUI>
                 <sys:Int32>0</sys:Int32>
-            </vm:Heatpump.selectedTypeIndex>
+            </vm:Heatpump.selectedTypeIndexGUI>
         </vm:Heatpump>
 
         <vm:Heatpump titleText="Upstairs" controllerIdentity="02:26:89:28:25:C6" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Panasonic DKE">
-            <vm:Heatpump.heatpumpTypeNames>
+            <vm:Heatpump.heatpumpTypeNamesGUI>
                 <sys:String>Panasonic CKP</sys:String>
                 <sys:String>Panasonic DKE</sys:String>
                 <sys:String>Ultimate Pro Plus 13 FP</sys:String>
-            </vm:Heatpump.heatpumpTypeNames>
-            <vm:Heatpump.selectedTypeIndex>
+            </vm:Heatpump.heatpumpTypeNamesGUI>
+            <vm:Heatpump.selectedTypeIndexGUI>
                 <sys:Int32>1</sys:Int32>
-            </vm:Heatpump.selectedTypeIndex>
+            </vm:Heatpump.selectedTypeIndexGUI>
         </vm:Heatpump>
         <vm:Heatpump titleText="Garage" controllerIdentity="02:26:89:28:25:C7" powerState="False" expanded="False" notExpanded="True" heatpumpDisplayName="Ultimate Pro Plus 13 FP">
-            <vm:Heatpump.heatpumpTypeNames>
+            <vm:Heatpump.heatpumpTypeNamesGUI>
                 <sys:String>Panasonic CKP</sys:String>
                 <sys:String>Panasonic DKE</sys:String>
                 <sys:String>Ultimate Pro Plus 13 FP</sys:String>
-            </vm:Heatpump.heatpumpTypeNames>
-            <vm:Heatpump.selectedTypeIndex>
+            </vm:Heatpump.heatpumpTypeNamesGUI>
+            <vm:Heatpump.selectedTypeIndexGUI>
                 <sys:Int32>2</sys:Int32>
-            </vm:Heatpump.selectedTypeIndex>
+            </vm:Heatpump.selectedTypeIndexGUI>
         </vm:Heatpump>
     </vm:MainViewModel.heatpumps>
     

@@ -77,11 +77,11 @@ namespace Heatpump_Control.Converters
         {
             if (value is int)
             {
-                if ((int)value == 1)
+                if ((int)value == 0)
                 {
                     return "AUTO";
                 }
-                return (int)value - 1; // AUTO is 1, FAN1 == 2 etc.
+                return (int)value;
             }
 
             return null;

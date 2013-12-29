@@ -74,10 +74,30 @@ namespace Heatpump_Control
 
             foreach (Heatpump heatpump in App.ViewModel.heatpumps)
             {
+                if (heatpump.selectedTypeIndexGUI == 0)
+                {
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        MessageBox.Show(AppResources.MustSelectType);
+                    });
+
+                    return;
+                }
+
+                if (heatpump.titleText.Equals(""))
+                {
+                    Dispatcher.BeginInvoke(() =>
+                    {
+                        MessageBox.Show(AppResources.EmptyHeatpumpName);
+                    });
+
+                    return;
+                }
+
                 heatpump.expanded = false;
             }
 
-            settings.HeatpumpsSettings = JsonFunctions.SerializeHeatpumps(App.ViewModel.heatpumps);
+            settings.HeatpumpsSettings = JsonFunctions.SerializeToJsonString(App.ViewModel.heatpumps);
             settings.Save();
 
             NavigationService.GoBack();
@@ -124,9 +144,9 @@ namespace Heatpump_Control
         // * There might be multiple responses if there are multiple controllers, the first one will hide the progressbar
         void handleIdentifyResponse(string response)
         {
-            HeatPumpStateCommand identifyResponse = JsonFunctions.DeserializeStateCommandFromJsonString(response);
+            HeatPumpIdentifyResponse identifyResponse = (HeatPumpIdentifyResponse)JsonFunctions.DeserializeFromStringToJson(response, typeof(HeatPumpIdentifyResponse));
 
-            Heatpump foundController = new Heatpump(identifyResponse.identity);
+            Heatpump foundController = new Heatpump(identifyResponse);
 
             Dispatcher.BeginInvoke(() =>
             {

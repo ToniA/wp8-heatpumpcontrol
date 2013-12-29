@@ -96,6 +96,8 @@
     <Compile Include="Classes\HeatPump.cs" />
     <Compile Include="Classes\JsonDataTypes.cs" />
     <Compile Include="Classes\Settings.cs" />
+    <Compile Include="DataSources\GenericDataSource.cs" />
+    <Compile Include="DataSources\ListLoopingDataSource.cs" />
     <Compile Include="Functions\ModalUtils.cs" />
     <Compile Include="HeatpumpControllerPage.xaml.cs">
       <DependentUpon>HeatpumpControllerPage.xaml</DependentUpon>

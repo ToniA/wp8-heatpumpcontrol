@@ -233,4 +233,13 @@
   <data name="WipeSettings" xml:space="preserve">
     <value>palauta oletusasetukset</value>
   </data>
+  <data name="EmptyHeatpumpName" xml:space="preserve">
+    <value>Lämpöpumpun nimeä ei ole annettu</value>
+  </data>
+  <data name="MustSelectType" xml:space="preserve">
+    <value>Lämpöpumpun tyyppiä ei ole valittu</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Valitse...</value>
+  </data>
 </root>

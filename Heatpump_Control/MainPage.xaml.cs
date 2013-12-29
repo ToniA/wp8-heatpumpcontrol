@@ -9,6 +9,8 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.Phone.Notification;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Heatpump_Control.Resources;
 
 namespace Heatpump_Control
@@ -24,7 +26,7 @@ namespace Heatpump_Control
             InitializeComponent();
 
             // Load heatpumps from the settings data
-            App.ViewModel.heatpumps = JsonFunctions.DeserializeHeatpumps(App.ViewModel.settings.HeatpumpsSettings);
+            App.ViewModel.heatpumps = (ObservableCollection<Heatpump>)JsonFunctions.DeserializeFromStringToJson(App.ViewModel.settings.HeatpumpsSettings, typeof(ObservableCollection<Heatpump>));
 
             DataContext = App.ViewModel;
 
@@ -132,7 +134,7 @@ namespace Heatpump_Control
                 message = reader.ReadToEnd();
             }
 
-            HeatPumpIdentifyResponse response = JsonFunctions.DeserializeIdentifyCommandFromJsonString(message);
+            HeatPumpIdentifyResponse response = (HeatPumpIdentifyResponse)JsonFunctions.DeserializeFromStringToJson(message, typeof(HeatPumpIdentifyResponse));
 
             System.Diagnostics.Debug.WriteLine("response to command: " + response.command + ":\n" + message);
 

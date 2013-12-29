@@ -58,10 +58,10 @@
 
                                 <toolkit:ListPicker Name="HeatpumpTypePicker">
                                     <toolkit:ListPicker.ItemsSource>
-                                        <Binding Path="heatpumpTypeNames" Mode="OneWay"/>
+                                        <Binding Path="heatpumpTypeNamesGUI" Mode="OneWay"/>
                                     </toolkit:ListPicker.ItemsSource>
                                     <toolkit:ListPicker.SelectedIndex>
-                                        <Binding Path="selectedTypeIndex" Mode="TwoWay"/>
+                                        <Binding Path="selectedTypeIndexGUI" Mode="TwoWay"/>
                                     </toolkit:ListPicker.SelectedIndex>
                                     <toolkit:ListPicker.ItemTemplate>
                                         <DataTemplate>

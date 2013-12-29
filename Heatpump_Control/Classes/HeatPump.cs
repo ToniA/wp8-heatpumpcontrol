@@ -15,141 +15,11 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Collections.Specialized;
 using Microsoft.Phone.Controls.Primitives;
+using Heatpump_Control.Resources;
+
 
 namespace Heatpump_Control
 {
-
-    [DataContract]
-    public class HeatpumpType
-    {
-        // Panasonic CKP constants
-        public const int PanasonicCKPModes = 5;
-        public const int PanasonicCKPMaxFan = 6; // AUTO + 5 speeds
-
-        // Panasonic DKE constants
-        public const int PanasonicDKEModes = 5;
-        public const int PanasonicDKEMaxFan = 6; // AUTO + 5 speeds
-
-        public const int PanasonicMinTemperature = 16;
-        public const int PanasonicMaxTemperature = 30;
-
-        // Midea (Ultimate Pro Plus 13 FP) constants
-        public const int MideaModes = 6;
-        public const int MideaMaxFan = 4; // AUTO + 3 speeds
-
-        public const int MideaMinTemperature = 16;
-        public const int MideaMaxTemperature = 30;
-
-        // Carrier constants
-        public const int CarrierModes = 5;
-        public const int CarrierMaxFan = 6; // AUTO + 5 speeds
-
-        public const int CarrierMinTemperature = 17;
-        public const int CarrierMaxTemperature = 30;
-
-        [DataMember]
-        public string name { get; set; }
-        [DataMember]
-        public string displayName { get; set; }
-        [DataMember]
-        public int numberOfModes { get; set; }
-        [DataMember]
-        public int minTemperature { get; set; }
-        [DataMember]
-        public int maxTemperature { get; set; }
-        [DataMember]
-        public int numberOfFanSpeeds { get; set; }
-
-        public HeatpumpType()
-        {
-        }
-
-        public HeatpumpType(string name, string displayName, int numberOfModes, int minTemperature, int maxTemperature, int numberOfFanSpeeds)
-        {
-            this.name = name;
-            this.displayName = displayName;
-            this.numberOfModes = numberOfModes;
-            this.minTemperature = minTemperature;
-            this.maxTemperature = maxTemperature;
-            this.numberOfFanSpeeds = numberOfFanSpeeds;
-        }
-
-        // Without this the ListPicker doesn't show up properly in the designer, but throws
-        // "SelectedIndex must always be set to a valid value"
-        public override bool Equals(object obj)
-        {
-            var target = obj as HeatpumpType;
-            if (target == null)
-                return false;
-
-            if (this.name.Equals(target.name))
-                return true;
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return this.name.GetHashCode();
-        }
-
-    }
-
-    [DataContract]
-    [ContentProperty("HeatpumpType")]
-    public class HeatpumpTypes
-    {
-        [DataMember]
-        public List<HeatpumpType> heatpumpTypes { get; set; }
-
-        public HeatpumpTypes()
-        {
-            heatpumpTypes = new List<HeatpumpType>();
-        }
-
-        public void Add(string heatpumpTypeName)
-        {
-            if (heatpumpTypeName.Equals("panasonic_ckp"))
-            {
-                heatpumpTypes.Add(new HeatpumpType("panasonic_ckp", "Panasonic CKP", 
-                                  HeatpumpType.PanasonicCKPModes,
-                                  HeatpumpType.PanasonicMinTemperature,
-                                  HeatpumpType.PanasonicMaxTemperature,
-                                  HeatpumpType.PanasonicCKPMaxFan));
-            }
-            else if (heatpumpTypeName.Equals("panasonic_dke"))
-            {
-                heatpumpTypes.Add(new HeatpumpType("panasonic_dke", "Panasonic DKE",
-                                  HeatpumpType.PanasonicMinTemperature,
-                                  HeatpumpType.PanasonicMaxTemperature,
-                                  HeatpumpType.PanasonicDKEModes,
-                                  HeatpumpType.PanasonicDKEMaxFan));
-            }
-            else if (heatpumpTypeName.Equals("midea"))
-            {
-                heatpumpTypes.Add(new HeatpumpType("midea", "Ultimate Pro Plus 13FP", 
-                                  HeatpumpType.MideaModes,
-                                  HeatpumpType.MideaMinTemperature,
-                                  HeatpumpType.MideaMaxTemperature,
-                                  HeatpumpType.MideaMaxFan));
-            }
-            else if (heatpumpTypeName.Equals("carrier"))
-            {
-                heatpumpTypes.Add(new HeatpumpType("carrier", "Carrier",
-                                  HeatpumpType.CarrierModes,
-                                  HeatpumpType.CarrierMinTemperature,
-                                  HeatpumpType.CarrierMaxTemperature,
-                                  HeatpumpType.CarrierMaxFan));
-            }
-        }
-
-
-        public List<string> getHeatpumpTypes()
-        {
-            return (List<string>)heatpumpTypes.Select(p => p.displayName);
-        }
-    }
-
     [DataContract]
     public class Heatpump : INotifyPropertyChanged
     {
@@ -161,21 +31,23 @@ namespace Heatpump_Control
         [DataMember]
         private string _titleText = "";
         [DataMember]
-        private HeatpumpTypes _heatpumpTypes = new HeatpumpTypes();
-        [DataMember]
         private int _pumpTypeIndex = 0;
 
-        // Saved while in maintenance heat mode
-        private int _temperatureSaved;
-        private int _fanSpeedSaved;
-
+        // The LoopingSelector data sources
         private ILoopingSelectorDataSource _operatingModes;
         private ILoopingSelectorDataSource _temperatures;
         private ILoopingSelectorDataSource _fanSpeeds;
 
+        // Saved fan speed and temperature for maintenance and fan modes
+        private int _fanSpeedSaved = -1;
+        private int _temperatureSaved = -1;
+
         // Public properties 
         [DataMember]
         public string controllerIdentity { get; set; }
+
+        [DataMember]
+        private ObservableCollection<HeatpumpModel> heatpumpTypes = new ObservableCollection<HeatpumpModel>();
 
         [DataMember]
         public NumbersDataSource operatingModes
@@ -184,15 +56,15 @@ namespace Heatpump_Control
             set { _operatingModes = value; }
         }
         [DataMember]
-        public NumbersDataSource temperatures
+        public ListLoopingDataSource<int> temperatures
         {
-            get { return (NumbersDataSource)_temperatures; }
+            get { return (ListLoopingDataSource<int>)_temperatures; }
             set { _temperatures = value; }
         }
         [DataMember]
-        public NumbersDataSource fanSpeeds
+        public ListLoopingDataSource<int> fanSpeeds
         {
-            get { return (NumbersDataSource)_fanSpeeds; }
+            get { return (ListLoopingDataSource<int>)_fanSpeeds; }
             set { _fanSpeeds = value; }
         }
 
@@ -201,29 +73,21 @@ namespace Heatpump_Control
         {
         }
 
-        // When a new heatpump is created, only it's controller identity is known
-        public Heatpump(string controllerIdentity)
+        // When a new heatpump is created, only its controller identity and supported types are known
+        public Heatpump(HeatPumpIdentifyResponse identifyResponse)
         {
-            this.controllerIdentity = controllerIdentity;
+            this.controllerIdentity = identifyResponse.identity;
+            this.heatpumpTypes = identifyResponse.heatpumpmodels;
 
             this._powerState = true;
             this._expanded = true;
             this._titleText = "";
-            this._pumpTypeIndex = 0;
+            this._pumpTypeIndex = -1;
 
-            this.operatingModes = new NumbersDataSource() { Minimum = 1, Maximum = 5, Default = 2 };
-            this._operatingModes.SelectionChanged += operatingModes_SelectionChanged;
-
-            this.temperatures = new NumbersDataSource() { Minimum = 16, Maximum = 30, Default = 23 };
-            this.fanSpeeds = new NumbersDataSource() { Minimum = 1, Maximum = 6, Default = 1 };
-
-            // In a later phase the idea is that the controller tells which types it supports
-            // For now, let's just hardwire them here
-
-            heatpumpTypes.Add("panasonic_ckp");
-            heatpumpTypes.Add("panasonic_dke");
-            heatpumpTypes.Add("midea");
-            heatpumpTypes.Add("carrier");
+            // Dummy data for the LoopingSelectors
+            this.operatingModes = new NumbersDataSource() { Minimum = HeatpumpModel.MODE_AUTO, Maximum = HeatpumpModel.MODE_AUTO, Default = HeatpumpModel.MODE_AUTO };
+            this.temperatures = new ListLoopingDataSource<int>() { Items = Enumerable.Range(0, 1), SelectedItem = 0 };
+            this.fanSpeeds = new ListLoopingDataSource<int>() { Items = Enumerable.Range(HeatpumpModel.FAN_AUTO, 1), SelectedItem = HeatpumpModel.FAN_AUTO };
         }
 
         public void SetNotifications()
@@ -231,43 +95,69 @@ namespace Heatpump_Control
             this._operatingModes.SelectionChanged += operatingModes_SelectionChanged;
         }
 
-
-        // Change the allowed temperature and fan speed values when the mode goes to 'maintenance'
+        // Change the allowed temperature and fan speed values when the mode goes to 'maintenance' or 'fan' mode
         public void operatingModes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var operatingMode = sender as NumbersDataSource;
 
-            if ((int)operatingMode.SelectedItem == 6) // Maintenance mode, only possible temperature is +10 and max fan speed
+            // Maintenance or Fan removed -> restore 'normal' values
+            if ((int)(e.RemovedItems[0]) == HeatpumpModel.MODE_MAINT || (int)(e.RemovedItems[0]) == HeatpumpModel.MODE_FAN)
             {
-                this._temperatureSaved = (int)this.temperatures.SelectedItem;
-                this.temperatures.Minimum = 10;
-                this.temperatures.Maximum = 10;
-                this.temperatures.SelectedItem = 10;
+                // Restore the temperatures list in both cases
+                this.temperatures.Items = Enumerable.Range(this.heatpumpTypes[_pumpTypeIndex].minTemperature,
+                                            (this.heatpumpTypes[_pumpTypeIndex].maxTemperature - this.heatpumpTypes[_pumpTypeIndex].minTemperature) + 1).ToList();
+                if (_temperatureSaved >= this.heatpumpTypes[_pumpTypeIndex].minTemperature)
+                {
+                    this.temperatures.SelectedItem = _temperatureSaved;
+                }
+                else
+                {
+                    this.temperatures.SelectedItem = 23;
+                }
 
-                this._fanSpeedSaved = (int)this.fanSpeeds.SelectedItem;
-                this.fanSpeeds.Minimum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
-                this.fanSpeeds.Maximum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
-                this.fanSpeeds.SelectedItem = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
+                // Restore the fan speeds only if going away from maintenance mode
+                if ((int)(e.RemovedItems[0]) == HeatpumpModel.MODE_MAINT)
+                {
+                    // Restore the fan speeds list
+                    this.fanSpeeds.Items = Enumerable.Range(HeatpumpModel.FAN_AUTO, this.heatpumpTypes[_pumpTypeIndex].numberOfFanSpeeds).ToList();
+                    if (_fanSpeedSaved != -1)
+                    {
+                        this.fanSpeeds.SelectedItem = _fanSpeedSaved;
+                    }
+                    else
+                    {
+                        this.fanSpeeds.SelectedItem = HeatpumpModel.FAN_AUTO;
+                    }
+                }
             }
-            else if ((int)operatingMode.SelectedItem == 5) // FAN mode, do not show the temperature setting in FAN mode
+
+            // Maintenance mode was added -> set 'maintenance' values
+            if ((int)(e.AddedItems[0]) == HeatpumpModel.MODE_MAINT)
             {
-                this._temperatureSaved = (int)this.temperatures.SelectedItem;
-                this._fanSpeedSaved = (int)this.fanSpeeds.SelectedItem;
-                this.temperatures.Minimum = 0;
-                this.temperatures.Maximum = 0;
+                _fanSpeedSaved = (int)this.fanSpeeds.SelectedItem;
+                if ((int)this.temperatures.SelectedItem >= this.heatpumpTypes[_pumpTypeIndex].minTemperature)
+                {
+                    _temperatureSaved = (int)this.temperatures.SelectedItem;
+                }
+
+                this.temperatures.Items = this.heatpumpTypes[this.selectedTypeIndex].maintenance;
+                this.temperatures.SelectedItem = this.heatpumpTypes[this.selectedTypeIndex].maintenance[0];
+
+                this.fanSpeeds.Items = Enumerable.Range(this.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds, 1).ToList();
+                this.fanSpeeds.SelectedItem = this.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
+            }
+
+            // Fan mode was added -> set 'fan' values
+            if ((int)(e.AddedItems[0]) == HeatpumpModel.MODE_FAN)
+            {
+                if ((int)this.temperatures.SelectedItem >= this.heatpumpTypes[_pumpTypeIndex].minTemperature)
+                {
+                    _temperatureSaved = (int)this.temperatures.SelectedItem;
+                }
+
+                // Set the temperatures list to a list of a single zero -> nothing is shown by the temperature converter
+                this.temperatures.Items = Enumerable.Range(0, 1).ToList();
                 this.temperatures.SelectedItem = 0;
-            }
-            else if ((int)(e.RemovedItems[0]) == 5 || (int)(e.RemovedItems[0]) == 6)
-            {
-                this.temperatures.Minimum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].minTemperature;
-                this.temperatures.Maximum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].maxTemperature;
-                this.temperatures.SelectedItem = (this._temperatureSaved >= this.temperatures.Minimum) ?
-                     this._temperatureSaved : this.temperatures.Default;
-
-                this.fanSpeeds.Minimum = 1;
-                this.fanSpeeds.Maximum = this.heatpumpTypes.heatpumpTypes[this.selectedTypeIndex].numberOfFanSpeeds;
-                this.fanSpeeds.SelectedItem = (this._fanSpeedSaved < this.fanSpeeds.Maximum) ?
-                    this._fanSpeedSaved : this.fanSpeeds.Maximum;
             }
 
             NotifyPropertyChanged("temperatures");
@@ -331,19 +221,6 @@ namespace Heatpump_Control
             }
         }
 
-        // List of all supported heatpump types
-        public HeatpumpTypes heatpumpTypes
-        {
-            get
-            {
-                return _heatpumpTypes;
-            }
-            set
-            {
-                _heatpumpTypes = value;
-            }
-        }
-
         // The name of the heatpump type, like 'panasonic_ckp'
         public string heatpumpTypeName
         {
@@ -351,7 +228,7 @@ namespace Heatpump_Control
             {
                 if (selectedTypeIndex != -1)
                 {
-                    return heatpumpTypes.heatpumpTypes[selectedTypeIndex].name;
+                    return heatpumpTypes[selectedTypeIndex].model;
                 }
                 else
                 {
@@ -368,7 +245,7 @@ namespace Heatpump_Control
             {
                 if (selectedTypeIndex != -1)
                 {
-                    return heatpumpTypes.heatpumpTypes[selectedTypeIndex].displayName;
+                    return heatpumpTypes[selectedTypeIndex].displayName;
                 }
                 else
                 {
@@ -380,13 +257,15 @@ namespace Heatpump_Control
         }
 
         // A list of all known heatpump types, in the user-friendly format
+        // The first entry is 'Select...', which forces the user to actually select something
+        // -> causes the selectedTypeIndex to fire up
         public List<string> heatpumpTypeNames
         {
             get
             {
                 List<String> heatpumpTypeNames = new List<String>();
 
-                foreach (HeatpumpType heatpumpType in heatpumpTypes.heatpumpTypes)
+                foreach (var heatpumpType in heatpumpTypes)
                 {
                     heatpumpTypeNames.Add(heatpumpType.displayName);
                 }
@@ -395,6 +274,42 @@ namespace Heatpump_Control
             }
             set
             { }
+        }
+
+        // A list of all known heatpump types, in the user-friendly format
+        // The first entry is 'Select...', which forces the user to actually select something
+        // -> causes the selectedTypeIndex to fire up
+        public List<string> heatpumpTypeNamesGUI
+        {
+            get
+            {
+                List<String> heatpumpTypeNames = this.heatpumpTypeNames;
+                heatpumpTypeNames.Insert(0, AppResources.Select);
+
+                return heatpumpTypeNames;
+            }
+            set
+            { }
+        }
+
+        // Set or get the selected type of this heatpump instance
+        public int selectedTypeIndexGUI
+        {
+            get
+            {
+                if (_pumpTypeIndex == -1)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return _pumpTypeIndex + 1;
+                }
+            }
+            set
+            {
+                selectedTypeIndex = value - 1;
+            }
         }
 
         // Set or get the selected type of this heatpump instance
@@ -410,33 +325,22 @@ namespace Heatpump_Control
                 {
                     _pumpTypeIndex = value;
 
-                    // Only offer maintenance mode on models which support it
-                    ((NumbersDataSource)operatingModes).Maximum = heatpumpTypes.heatpumpTypes[value].numberOfModes;
+                    // Set the operating modes list
+                    this.operatingModes.Minimum = HeatpumpModel.MODE_AUTO;
+                    this.operatingModes.Maximum = this.heatpumpTypes[_pumpTypeIndex].numberOfModes;
+                    this.operatingModes.Default = HeatpumpModel.MODE_HEAT;
 
-                    if ((int)operatingModes.SelectedItem > ((NumbersDataSource)operatingModes).Maximum)
-                    {
-                        operatingModes.SelectedItem = ((NumbersDataSource)operatingModes).Maximum;
-                    }
+                    // Set the temperatures list
+                    this.temperatures.Items = Enumerable.Range(this.heatpumpTypes[_pumpTypeIndex].minTemperature,
+                                                (this.heatpumpTypes[_pumpTypeIndex].maxTemperature - this.heatpumpTypes[_pumpTypeIndex].minTemperature) + 1).ToList();
+                    this.temperatures.SelectedItem = 23;
 
-                    // Only offer the number of temperatures the model supports
-                    ((NumbersDataSource)temperatures).Maximum = heatpumpTypes.heatpumpTypes[value].maxTemperature;
-                    ((NumbersDataSource)temperatures).Minimum = heatpumpTypes.heatpumpTypes[value].minTemperature;
-                    if ((int)temperatures.SelectedItem > ((NumbersDataSource)temperatures).Maximum)
-                    {
-                        temperatures.SelectedItem = ((NumbersDataSource)temperatures).Maximum;
-                    }
-                    if ((int)temperatures.SelectedItem < ((NumbersDataSource)temperatures).Minimum)
-                    {
-                        temperatures.SelectedItem = ((NumbersDataSource)temperatures).Maximum;
-                    }
+                    // Set the fan speeds list
+                    this.fanSpeeds.Items = Enumerable.Range(HeatpumpModel.FAN_AUTO, this.heatpumpTypes[_pumpTypeIndex].numberOfFanSpeeds).ToList();
+                    this.fanSpeeds.SelectedItem = HeatpumpModel.FAN_AUTO;
 
-                    // Only offer the number of fanspeeds the model supports
-                    ((NumbersDataSource)fanSpeeds).Maximum = heatpumpTypes.heatpumpTypes[value].numberOfFanSpeeds;
-                    if ((int)fanSpeeds.SelectedItem > ((NumbersDataSource)fanSpeeds).Maximum)
-                    {
-                        fanSpeeds.SelectedItem = ((NumbersDataSource)fanSpeeds).Maximum;
-                    }
-
+                    // Send the notification about changed data
+                    NotifyPropertyChanged("operatingModes");
                     NotifyPropertyChanged("heatpumpType");
                     NotifyPropertyChanged("heatpumpTypeName");
                     NotifyPropertyChanged("heatpumpDisplayName");

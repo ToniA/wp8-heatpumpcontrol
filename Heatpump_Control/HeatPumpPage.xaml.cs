@@ -131,7 +131,7 @@ namespace Heatpump_Control
             UnExpandLoopingSelectors(pivot, null);
 
             // Save the heatpump state
-            App.ViewModel.settings.HeatpumpsSettings = JsonFunctions.SerializeHeatpumps(App.ViewModel.heatpumps);
+            App.ViewModel.settings.HeatpumpsSettings = JsonFunctions.SerializeToJsonString(App.ViewModel.heatpumps);
             App.ViewModel.settings.Save();
 
             // Show the progress bar and dim the app
@@ -169,7 +169,7 @@ namespace Heatpump_Control
         // * Display the acknowledgement popup
         void handleCommandResponse(string response)
         {
-            HeatPumpStateCommand cmdResponse = JsonFunctions.DeserializeStateCommandFromJsonString(response);
+            HeatPumpStateCommand cmdResponse = (HeatPumpStateCommand)JsonFunctions.DeserializeFromStringToJson(response, typeof(HeatPumpStateCommand));
 
             Dispatcher.BeginInvoke(() =>
                 {

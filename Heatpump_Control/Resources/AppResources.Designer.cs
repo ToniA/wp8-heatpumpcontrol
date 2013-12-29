@@ -115,6 +115,15 @@ namespace Heatpump_Control.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Heatpump name must be defined.
+        /// </summary>
+        public static string EmptyHeatpumpName {
+            get {
+                return ResourceManager.GetString("EmptyHeatpumpName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to FAN SPEED.
         /// </summary>
         public static string FanSpeed {
@@ -174,6 +183,15 @@ namespace Heatpump_Control.Resources {
         public static string IRSend {
             get {
                 return ResourceManager.GetString("IRSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Heatpump type must be selected.
+        /// </summary>
+        public static string MustSelectType {
+            get {
+                return ResourceManager.GetString("MustSelectType", resourceCulture);
             }
         }
         
@@ -264,6 +282,15 @@ namespace Heatpump_Control.Resources {
         public static string SearchForControllers {
             get {
                 return ResourceManager.GetString("SearchForControllers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select....
+        /// </summary>
+        public static string Select {
+            get {
+                return ResourceManager.GetString("Select", resourceCulture);
             }
         }
         
