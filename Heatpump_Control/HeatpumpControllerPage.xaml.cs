@@ -19,11 +19,11 @@ namespace Heatpump_Control
             InitializeComponent();
             DataContext = App.ViewModel;
 
-            if (!App.ViewModel.rawNotificationHandlers.ContainsKey("identify"))
+            if (!App.ViewModel.notificationHandlers.ContainsKey("identify"))
             {
                 // Raw notification handler for the 'identify' response
                 receiveCommandHandler identifyHandler = handleIdentifyResponse;
-                App.ViewModel.rawNotificationHandlers.Add("identify", identifyHandler);
+                App.ViewModel.notificationHandlers.Add("identify", identifyHandler);
             }
         }
 
@@ -127,10 +127,7 @@ namespace Heatpump_Control
                                       App.ViewModel.settings.pushChannel.ChannelUri.Port + ":" +
                                       App.ViewModel.settings.pushChannel.ChannelUri.AbsolutePath;
 
-            // Serialize the command to JSON and send it
-            string Json = JsonFunctions.SerializeToJsonString(identifyCommand);
-            System.Diagnostics.Debug.WriteLine(Json);
-            NetworkFunctions.SendJson(Json);
+            NetworkFunctions.SendHeatpumpIdentify(identifyCommand);
 
             // Set the timeout for sending the command
             ModalUtils.timeoutTimer.Interval = TimeSpan.FromSeconds(15);

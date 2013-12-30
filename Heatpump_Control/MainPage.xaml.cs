@@ -18,7 +18,6 @@ namespace Heatpump_Control
     public partial class MainPage : PhoneApplicationPage
     {
         public string SSID;
-        public string ipAddress;
 
         // Constructor
         public MainPage()
@@ -30,10 +29,9 @@ namespace Heatpump_Control
 
             DataContext = App.ViewModel;
 
-            // Get my SSID and IP address
+            // Get my SSID
             // SSID is used to detect if direct UDP communication could be used
             SSID = NetworkFunctions.FindWIFISSID();
-            ipAddress = NetworkFunctions.FindIPAddress();
 
             // Sample code to localize the ApplicationBar
             //BuildLocalizedApplicationBar();
@@ -114,7 +112,7 @@ namespace Heatpump_Control
         /// Event handler for when a Push Notification error occurs.
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="ea"></param>
         void PushChannel_ErrorOccurred(object sender, NotificationChannelErrorEventArgs e)
         {
             // Error handling logic for your particular application would be here.
@@ -124,7 +122,7 @@ namespace Heatpump_Control
                     );
         }
 
-        // Handles the RAW notification from the Arduino
+        // Handles the Windows Phone RAW notification from the Arduino
         void PushChannel_HttpNotificationReceived(object sender, HttpNotificationEventArgs e)
         {
             string message;
@@ -138,10 +136,10 @@ namespace Heatpump_Control
 
             System.Diagnostics.Debug.WriteLine("response to command: " + response.command + ":\n" + message);
 
-            if (App.ViewModel.rawNotificationHandlers.ContainsKey(response.command))
+            if (App.ViewModel.notificationHandlers.ContainsKey(response.command))
             {
                 System.Diagnostics.Debug.WriteLine("Found handler for command " + response.command);
-                App.ViewModel.rawNotificationHandlers[response.command](message);
+                App.ViewModel.notificationHandlers[response.command](message);
             }
         }
 

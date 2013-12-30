@@ -22,11 +22,11 @@ namespace Heatpump_Control
             InitializeComponent();
             DataContext = App.ViewModel;
 
-            if (!App.ViewModel.rawNotificationHandlers.ContainsKey("command"))
+            if (!App.ViewModel.notificationHandlers.ContainsKey("command"))
             {
                 // Raw notification handler for the 'command' response
                 receiveCommandHandler commandHandler = handleCommandResponse;
-                App.ViewModel.rawNotificationHandlers.Add("command", commandHandler);
+                App.ViewModel.notificationHandlers.Add("command", commandHandler);
             }
 
             // Set the operating mode notifications on
@@ -38,7 +38,7 @@ namespace Heatpump_Control
 
         // Navigate to the requested pivot page, or first page requested page is '-1'
         // * '-1' means that there's only one pump, and the pump selection page is not shown at all
-        // * in that case also the navigation history is cleaned, i.e. this page appears as the launch page
+        // * in that case also the navigation history is cleaned, i.ea. this page appears as the launch page
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             // Localize the appbar, this cannot be done with XAML bindings
@@ -153,10 +153,7 @@ namespace Heatpump_Control
             heatpumpCommand.fan = (int)selectedHeatpump.fanSpeeds.SelectedItem;
             heatpumpCommand.temperature = (int)selectedHeatpump.temperatures.SelectedItem;
 
-            // Serialize the command to JSON and send it
-            string Json = JsonFunctions.SerializeToJsonString(heatpumpCommand);
-            System.Diagnostics.Debug.WriteLine(Json);
-            NetworkFunctions.SendJson(Json);
+            NetworkFunctions.SendHeatpumpCommand(heatpumpCommand);
 
             // Set the timeout for sending the command
             ModalUtils.timeoutTimer.Interval = TimeSpan.FromSeconds(15);

@@ -20,11 +20,11 @@ namespace Heatpump_Control
         {
             this.heatpumps = new ObservableCollection<Heatpump>();
             this.settings = new Settings();
-            this.rawNotificationHandlers = new Dictionary<string, receiveCommandHandler>();
+            this.notificationHandlers = new Dictionary<string, receiveCommandHandler>();
         }
 
         public Settings settings { get; set; }
-        public Dictionary<string, receiveCommandHandler> rawNotificationHandlers { get; set; }
+        public Dictionary<string, receiveCommandHandler> notificationHandlers { get; set; }
         public ObservableCollection<Heatpump> heatpumps
         {
             get { return _Heatpumps; }
