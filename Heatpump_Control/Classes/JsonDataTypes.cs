@@ -86,9 +86,6 @@ namespace Heatpump_Control
         [DataMember(Name = "dn", IsRequired = true)]
         public string displayName { get; set; }
 
-        [DataMember(Name = "mds", IsRequired = true)]
-        public int numberOfModes { get; set; }
-
         [DataMember(Name = "mT", IsRequired = true)]
         public int minTemperature { get; set; }
 

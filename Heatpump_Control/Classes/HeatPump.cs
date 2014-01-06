@@ -327,7 +327,17 @@ namespace Heatpump_Control
 
                     // Set the operating modes list
                     this.operatingModes.Minimum = HeatpumpModel.MODE_AUTO;
-                    this.operatingModes.Maximum = this.heatpumpTypes[_pumpTypeIndex].numberOfModes;
+
+
+                    if (this.heatpumpTypes[_pumpTypeIndex].maintenance != null)
+                    {
+                        this.operatingModes.Maximum = HeatpumpModel.MODE_MAINT;
+                    }
+                    else
+                    {
+                        this.operatingModes.Maximum = HeatpumpModel.MODE_FAN;
+                    }
+
                     this.operatingModes.Default = HeatpumpModel.MODE_HEAT;
 
                     // Set the temperatures list
