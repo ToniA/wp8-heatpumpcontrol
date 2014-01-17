@@ -11,6 +11,7 @@ using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.Phone.Notification;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using ReorderListBox;
 using Heatpump_Control.Resources;
 
 namespace Heatpump_Control
@@ -204,5 +205,16 @@ namespace Heatpump_Control
             this.NavigationService.Navigate(new Uri("/HeatpumpControllerPage.xaml", UriKind.Relative));
         }
 
+        //
+        // When the list of heatpumps is reordered, save the reordered list
+        //
+        private void Heatpump_ManipulationCompleted(object sender, System.Windows.Input.ManipulationCompletedEventArgs e)
+        {
+            ReorderListBox.ReorderListBox heatpumpList = sender as ReorderListBox.ReorderListBox;
+
+            Settings settings = App.ViewModel.settings;
+            settings.HeatpumpsSettings = JsonFunctions.SerializeToJsonString(App.ViewModel.heatpumps);
+            settings.Save();
+        }
     }
 }

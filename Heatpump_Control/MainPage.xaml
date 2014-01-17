@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:toolkitprimitives="clr-namespace:Microsoft.Phone.Controls.Primitives;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:rlb="clr-namespace:ReorderListBox;assembly=ReorderListBox"
     xmlns:local="clr-namespace:Heatpump_Control"
     xmlns:converter="clr-namespace:Heatpump_Control.Converters"
     mc:Ignorable="d"
@@ -60,16 +61,16 @@
         <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Margin="12,0,12,0" Grid.Row="1">
 
-            <ListBox Name="Heatpump" Margin="0,0,-12,0" ItemsSource="{Binding heatpumps, Mode=TwoWay}" SelectionChanged="HeatpumpList_SelectionChanged">
-                <ListBox.ItemTemplate>
+            <rlb:ReorderListBox Name="Heatpump" Margin="0,0,-12,0" ItemsSource="{Binding heatpumps, Mode=TwoWay}" SelectionChanged="HeatpumpList_SelectionChanged" IsReorderEnabled="True" ManipulationCompleted="Heatpump_ManipulationCompleted">
+                <rlb:ReorderListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0,0,0,17">
                             <TextBlock Text="{Binding titleText}" TextWrapping="NoWrap" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"/>
                             <TextBlock Text="{Binding heatpumpDisplayName}" TextWrapping="Wrap" Margin="12,-6,0,0" Style="{StaticResource PhoneTextSubtleStyle}"/>
                         </StackPanel>
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                </rlb:ReorderListBox.ItemTemplate>
+            </rlb:ReorderListBox>
 
         </Grid>
     </Grid>
