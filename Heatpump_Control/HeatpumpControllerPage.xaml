@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     xmlns:toolkitprimitives="clr-namespace:Microsoft.Phone.Controls.Primitives;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:rlb="clr-namespace:ReorderListBox;assembly=ReorderListBox"
     xmlns:converter="clr-namespace:Heatpump_Control.Converters"
     xmlns:local="clr-namespace:Heatpump_Control"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -43,8 +44,8 @@
          <!--ContentPanel - place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
 
-            <ListBox Name="Controller" Margin="0,0,-12,0" ItemsSource="{Binding heatpumps, Mode=TwoWay}">
-                <ListBox.ItemTemplate>
+            <rlb:ReorderListBox Name="Controller" Margin="0,0,-12,0" ItemsSource="{Binding heatpumps, Mode=TwoWay}" IsReorderEnabled="True">
+                <rlb:ReorderListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0,0,0,17">
                             <TextBlock Text="{Binding Path=LocalizedResources.HeatpumpControllerID, Source={StaticResource LocalizedStrings}}" TextWrapping="Wrap" Style="{StaticResource PhoneTextSubtleStyle}"/>
@@ -81,9 +82,9 @@
                             
                         </StackPanel>
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>          
-            
+                </rlb:ReorderListBox.ItemTemplate>
+            </rlb:ReorderListBox>
+
         </Grid>
 
         <!-- for "modal" progressbar -->    

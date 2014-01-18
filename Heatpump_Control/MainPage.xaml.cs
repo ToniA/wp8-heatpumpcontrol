@@ -204,17 +204,5 @@ namespace Heatpump_Control
         {
             this.NavigationService.Navigate(new Uri("/HeatpumpControllerPage.xaml", UriKind.Relative));
         }
-
-        //
-        // When the list of heatpumps is reordered, save the reordered list
-        //
-        private void Heatpump_ManipulationCompleted(object sender, System.Windows.Input.ManipulationCompletedEventArgs e)
-        {
-            ReorderListBox.ReorderListBox heatpumpList = sender as ReorderListBox.ReorderListBox;
-
-            Settings settings = App.ViewModel.settings;
-            settings.HeatpumpsSettings = JsonFunctions.SerializeToJsonString(App.ViewModel.heatpumps);
-            settings.Save();
-        }
     }
 }
